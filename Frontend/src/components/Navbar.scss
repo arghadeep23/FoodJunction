@@ -1,0 +1,29 @@
+header {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+    // margin: 10px 0px 10px 0px;
+    padding: 10px;
+    width: 100%;
+    position: sticky;
+    -webkit-box-shadow: 1px 2px 5px 2px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 1px 2px 5px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 2px 5px 2px rgba(0, 0, 0, 0.3);
+
+    .left {
+        flex: 15;
+        background-color: green;
+
+        span {
+            font-size: 30px;
+        }
+    }
+
+    .right {
+        flex: 2;
+        display: flex;
+        align-items: center;
+        background-color: blue;
+    }
+
+}
