@@ -69,10 +69,8 @@ app.get('/s3URL', async (req, res) => {
 
 app.use(bodyParser.json({ limit: '50mb' }))
 
-// creating a POST endpoint for testing data submission to DB
+// creating a POST endpoint for handling data submission to MongoDB
 app.post('/uploads', async (req, res) => {
-    // console.log(req.file, "inside backend bitches");
-    // req.body.image = null // temporary fix
     const newFood = new food(req.body);
 
     try {
@@ -82,6 +80,17 @@ app.post('/uploads', async (req, res) => {
         res.status(409).json({ message: err.message })
     }
 });
+
+// creating a GET endpoint for fetching data from MongoDB
+app.get('/uploads', async (req, res) => {
+    try {
+        const foods = await food.find();
+        res.json(foods);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server started at port 3000');
 });

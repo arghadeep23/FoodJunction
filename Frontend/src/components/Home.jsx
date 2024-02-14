@@ -1,64 +1,9 @@
+import FoodItems from "./FoodItems"
+import "./Home.scss";
 export default function Home() {
     return <>   
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
-    Hello World! <br/>
+        <div className="mainHomeDiv">
+            <FoodItems/>
+        </div>  
     </>
 }

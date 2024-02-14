@@ -11,10 +11,8 @@ export default function FoodForm(){
     })
     const createFoodItem = async (foodData)=>{
         try{
-            console.log(foodData.image,"inside createFoodItem");
             // GET request to backend to fetch the presigned URL to put the image in S3
             const url = await fetch("http://localhost:3000/s3URL").then(response=>response.json());
-            console.log(url.url);
             // PUT request to S3 to upload the image
             await fetch(url.url,{
                 method : "PUT",
@@ -31,6 +29,7 @@ export default function FoodForm(){
                 description: foodData.description,
                 imageURL: imageUrl,
             }
+            // POST request to backend to submit the data to MongoDB
             await fetch("http://localhost:3000/uploads",{
                 method: "POST",
                 headers:{
