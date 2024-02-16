@@ -3,22 +3,55 @@
     justify-content: center;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
-    grid-auto-rows: 300px;
+    grid-auto-rows: 320px;
     gap: 25px;
+    padding-top: 25px;
 
     .foodItemCard {
-        background-color: black;
-        color: white;
+        // background-color: black;
+        width: 100%;
+        color: black;
+        display: flex;
+        // background-color: blue;
+        flex-direction: column;
+        align-items: center;
 
         img {
             height: 200px;
-            width: 200px;
+            width: 300px;
+            border-radius: 5px;
         }
 
-        div {
-            h3 {}
+        .info {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
 
-            p {}
+            .grouped {
+                .grouped2 {
+                    display: flex;
+                    justify-content: space-between;
+
+                    button {
+                        background-color: white;
+                        color: green;
+                        width: 50px;
+                        height: 20px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    }
+
+                    button:hover {
+                        background-color: rgb(31, 176, 31);
+                        color: white;
+                    }
+                }
+
+                .price {
+                    font-weight: bold;
+                }
+            }
         }
     }
 }

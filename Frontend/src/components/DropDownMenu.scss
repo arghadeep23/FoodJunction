@@ -1,0 +1,18 @@
+.dropdown {
+    position: absolute;
+    top: 51px;
+    width: 300px;
+    min-height: 300px;
+    transform: translateX(-50%);
+    // background-color: yellow; 
+    background-color: white;
+    border-top: 3px solid orange;
+    z-index: 100;
+    border-radius: 5px;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+    -webkit-box-shadow: -1px 1px 10px -1px rgba(0, 0, 0, 0.58);
+    -moz-box-shadow: -1px 1px 10px -1px rgba(0, 0, 0, 0.58);
+    box-shadow: -1px 1px 10px -1px rgba(0, 0, 0, 0.58);
+}
