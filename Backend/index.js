@@ -8,7 +8,10 @@ const promisify = require('util').promisify;
 const randomBytes = promisify(crypto.randomBytes);
 const connectdb = require("./models/db.js");
 connectdb();
-const food = require("./models/foodSchema.js");
+const food = require("./models/FoodSchema.js");
+const restaurant = require("./models/CompanySchema.js");
+const user = require("./models/User.js")
+const rating = require("./models/Rating.js");
 const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const ACCESS_KEYID = process.env.ACCESS_KEYID
@@ -80,6 +83,16 @@ app.post('/uploads', async (req, res) => {
         res.status(409).json({ message: err.message })
     }
 });
+app.post('/uploadRestaurant', async (req, res) => {
+    const newRestaurant = new restaurant(req.body);
+    try {
+        await newRestaurant.save();
+        res.send("Data has been submitted to the database");
+    }
+    catch (err) {
+        res.status(409).json({ message: err.message });
+    }
+})
 
 // creating a GET endpoint for fetching data from MongoDB
 app.get('/uploads', async (req, res) => {

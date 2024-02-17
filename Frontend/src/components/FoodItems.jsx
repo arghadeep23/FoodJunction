@@ -4,7 +4,7 @@ import "./FoodItems.scss";
 export default function FoodItems()
 {   
     const [foodItems,setFoodItems] = useState([]); 
-    const {addItemToCart} = useContext(CartContext);
+    const {addItemToCart,ordersMap,removeItemFromCart} = useContext(CartContext);
     useEffect(()=>{
         async function fetchFood()
         {
@@ -31,8 +31,19 @@ export default function FoodItems()
                                 <div className="grouped">
                                     <h3>{food.name}</h3>
                                     <div className="grouped2">
-                                        <p className="price">Price: ₹{food.price}</p>
-                                        <button onClick={()=>addItemToCart(food)}>Add </button>
+                                        <p className="price">₹{food.price}</p>
+                                        {
+                                            ordersMap.get(food._id) > 0 && 
+                                            <div className="addRemoveButtons">
+                                                <button className="remove" onClick={()=>removeItemFromCart(food)}>-</button>
+                                                <p className="quantity">{ordersMap.get(food._id)}</p>
+                                                <button className="add" onClick={()=>addItemToCart(food)}>+</button>
+                                            </div>
+                                        }
+                                        {
+                                            ordersMap.get(food._id)==undefined &&
+                                            <button className="addButton" onClick={()=>addItemToCart(food)}>Add </button>
+                                        }
                                     </div>
                                 </div>
                                 <p>{food.description}</p>

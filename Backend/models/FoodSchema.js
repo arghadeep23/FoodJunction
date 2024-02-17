@@ -20,6 +20,19 @@ const foodSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    likes: {
+        type: Number,
+    },
+    orders: {
+        type: Number,
+    },
+    restaurantId: {
+        type: String,
+    },
+    category: {
+        type: String
+    }
+
 });
 const Food = mongoose.model("Food", foodSchema);
 

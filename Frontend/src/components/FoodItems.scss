@@ -36,10 +36,38 @@
                     button {
                         background-color: white;
                         color: green;
-                        width: 50px;
-                        height: 20px;
                         font-weight: bold;
                         cursor: pointer;
+                    }
+
+                    .addButton {
+                        width: 50px;
+                        height: 20px;
+                    }
+
+                    .addRemoveButtons {
+                        display: flex;
+                        border: 1px solid black;
+                        border-radius: 8px;
+                        width: 50px;
+                        height: 20px;
+
+                        button {
+                            width: 15px;
+                            height: 18px;
+                            border: none;
+                            border-radius: 8px;
+                            // border-bottom: 1px solid black;
+                        }
+
+                        // button:hover {
+                        //     // transform: perspective(100px);
+                        //     width: 17px;
+                        //     height: 22px;
+                        //     /* Adjust translateY value for the pulled-up effect */
+                        // }
+
+                        justify-content: space-between;
                     }
 
                     button:hover {

@@ -4,7 +4,8 @@ export const CartContext = createContext(
         items : [] ,
         overallQuantity : 0,
         addItemToCart : (item)=>{},
-        removeItem : (id)=>{}
+        removeItemFromCart : (item)=>{},
+        ordersMap: new Map(),
     }
 );
 // export function CartContextProvider({children})

@@ -16,3 +16,16 @@
     -moz-box-shadow: -1px 1px 10px -1px rgba(0, 0, 0, 0.58);
     box-shadow: -1px 1px 10px -1px rgba(0, 0, 0, 0.58);
 }
+
+/* Adjust translateX for small screens */
+@media screen and (max-width: 1200px) {
+    .dropdown {
+        transform: translateX(-70%);
+    }
+}
+
+@media screen and (max-width:700px) {
+    .dropdown {
+        width: 250px;
+    }
+}
