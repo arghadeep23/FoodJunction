@@ -103,7 +103,14 @@ app.get('/uploads', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
+app.get('/restaurants', async (req, res) => {
+    try {
+        const restaurants = await restaurant.find();
+        res.json(restaurants);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 app.listen(3000, () => {
     console.log('Server started at port 3000');
 });

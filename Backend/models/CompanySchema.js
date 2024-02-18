@@ -30,7 +30,10 @@ const restaurantSchema = new mongoose.Schema({
     category: {
         type: String
     },
-    contact: {
+    phone: {
+        type: String
+    },
+    email: {
         type: String
     },
     coverPhotoURL: {

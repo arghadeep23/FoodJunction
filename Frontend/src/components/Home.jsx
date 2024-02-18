@@ -8,8 +8,8 @@ export default function Home() {
         <div className="mainHomeDiv">
             <FoodItems/>      
         </div>  
-        {/* <Link to="/landing">
+        <Link to="/landing">
                         <button>Register</button>
-        </Link> */}
+        </Link>
     </>
 }

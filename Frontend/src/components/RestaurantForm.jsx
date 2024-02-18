@@ -4,7 +4,8 @@ export default function RestaurantForm()
     const [formData,setFormData] = useState({
         name : "", 
         category : "", 
-        contact : "", 
+        phone : "", 
+        email : "",
         coverPhoto : null,
         description : "", 
         latitude : 0,
@@ -27,7 +28,8 @@ export default function RestaurantForm()
             const mongoData = {
                 name : restaurant.name, 
                 category : restaurant.category,
-                contact : restaurant.contact,
+                phone : restaurant.phone,
+                email : restaurant.email,
                 latitude : restaurant.latitude, 
                 longitude : restaurant.longitude , 
                 description : restaurant.description, 
@@ -69,7 +71,8 @@ export default function RestaurantForm()
         createRestaurant(formData); 
         setFormData({
             name : "", 
-            contact : "", 
+            phone : "", 
+            email : "",
             latitude : 0, 
             longitude : 0, 
             description : "", 
@@ -107,6 +110,14 @@ export default function RestaurantForm()
                     <div className="take">
                         <label htmlFor="longitude">Enter Latitude : </label>
                         <input type="text" name="longitude" placeholder="Longitude" id="longitude" value={formData.longitude} onChange={(event)=>handleInputChange('longitude',event)}/>
+                    </div>
+                    <div className="take">
+                        <label htmlFor="phone">Enter Phone Number : </label>
+                        <input type="text" name="phone" placeholder="phone" id="phone" value={formData.phone} onChange={(event)=>handleInputChange('phone',event)}/>
+                    </div>
+                    <div className="take">
+                        <label htmlFor="longitude">Enter Email : </label>
+                        <input type="text" name="email" placeholder="email" id="email" value={formData.email} onChange={(event)=>handleInputChange('email',event)}/>
                     </div>
                     <div className="take">
                         <label htmlFor="coverPhoto">Upload Cover Photo : </label>

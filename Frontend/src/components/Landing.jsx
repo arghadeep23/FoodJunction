@@ -1,6 +1,6 @@
 import "./Landing.scss";
 import { Link } from "react-router-dom"
-
+import {useState,useEffect} from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Bakery from "../assets/bakery.png"; 
@@ -26,6 +26,22 @@ import Healthy from "../assets/healthy.png";
 import { Fragment } from "react";
 export default function Landing()
 {
+    const [restaurants,setRestaurants] = useState([]); 
+    useEffect(()=>{
+        async function fetchRestaurants()
+        {
+            try{
+                const restaurant = await fetch("http://localhost:3000/restaurants").then(response=>response.json());
+                // console.log(foods);
+                setRestaurants(restaurant);
+            }
+            catch(error)
+            {
+                console.log(e);
+            }
+        }
+        fetchRestaurants();
+    },[])
     const responsive = {
     superLargeDesktop: {
         // the naming can be any, depends on you.
@@ -138,9 +154,27 @@ export default function Landing()
                     </div>
                 </Carousel>
             </div>
-            {/* <Link to="/">
+            <div className="restaurantCount">
+                    <h2>Choose from {restaurants.length} results!</h2>
+                </div>
+            <div className="restaurants">
+                
+                {restaurants.map((restaurant,index)=>{
+                    return (
+                        <div className="restaurantCard" key={index}>
+                            <img src={restaurant.coverPhotoURL} alt={restaurant.name}/>
+                            <div className="info">
+                                <div className="grouped">
+                                    <h3>{restaurant.name}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+            <Link to="/">
                 <button>Register</button>
-            </Link> */}
+            </Link>
         </div>
     )
 }
