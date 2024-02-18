@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Home from "./components/Home";
 import FoodForm from "./components/FoodForm";
 import Navbar from "./components/Navbar"; 
@@ -15,10 +15,30 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const [shoppingCart,setShoppingCart] = useState({
-    items : [],
-  })
-  const [ordersMap, setOrdersMap] = useState(new Map()); 
+  // const [shoppingCart,setShoppingCart] = useState({
+  //   items : [],
+  // })
+ const [shoppingCart, setShoppingCart] = useState(() => {
+  const storedCart = localStorage.getItem('items');
+  const parsedCart = storedCart ? JSON.parse(storedCart) : [];
+  return { items: parsedCart };
+});
+   useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(shoppingCart.items));
+  }, [shoppingCart]);
+  // const [ordersMap, setOrdersMap] = useState(new Map()); 
+  
+  const [ordersMap, setOrdersMap] = useState(() => {
+  const storedMap = localStorage.getItem('ordersMap');
+    if (storedMap) {
+      return new Map(JSON.parse(storedMap));
+    } else {
+      return new Map();
+    }
+  });
+  useEffect(() => {
+  localStorage.setItem('ordersMap', JSON.stringify(Array.from(ordersMap)));
+}, [ordersMap]);
   const [overallQuantity,setOverallQuantity] = useState(0);
   function handleAddItemToCart(food)
   {
@@ -93,7 +113,7 @@ function App() {
   const cartCtx = {
     items : shoppingCart.items,
     addItemToCart : handleAddItemToCart,
-    overallQuantity : overallQuantity,
+    overallQuantity : shoppingCart.items.reduce( (acc, item) => acc + item.quantity ,0 ),
     ordersMap : ordersMap,
     removeItemFromCart : handleRemoveItemFromCart,
   }

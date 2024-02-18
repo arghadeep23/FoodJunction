@@ -1,4 +1,6 @@
 import "./Landing.scss";
+import { Link } from "react-router-dom"
+
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Bakery from "../assets/bakery.png"; 
@@ -136,6 +138,9 @@ export default function Landing()
                     </div>
                 </Carousel>
             </div>
+            {/* <Link to="/">
+                <button>Register</button>
+            </Link> */}
         </div>
     )
 }
