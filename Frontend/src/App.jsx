@@ -123,20 +123,34 @@ function App() {
   };
   const router = createBrowserRouter([
     {
+      path: "/landing",
+      element: (
+        <Login2
+          path="/"
+          element={
+            <CartContext.Provider value={cartCtx}>
+              <Navbar needed={true} />
+              <Home />
+            </CartContext.Provider>
+          }
+        />
+      ),
+    },
+    {
       path: "/",
       element: (
         <CartContext.Provider value={cartCtx}>
           <Navbar needed={true} />
-          <Home />
+          <Landing />
         </CartContext.Provider>
       ),
     },
     {
-      path: "/landing",
+      path: "/:id/menu",
       element: (
         <CartContext.Provider value={cartCtx}>
           <Navbar needed={true} />
-          <Landing />
+          <Home />
         </CartContext.Provider>
       ),
     },

@@ -16,7 +16,7 @@ header {
     box-shadow: -1px 1px 8px -1px rgba(0, 0, 0, 0.49);
 
     .left {
-        flex: 15;
+        flex: 13;
         // background-color: green;
 
         span {
@@ -28,9 +28,10 @@ header {
     }
 
     .right {
-        flex: 2;
+        flex: 3;
         display: flex;
         align-items: center;
+        justify-content: space-around;
 
         // background-color: blue;
         .cart {
@@ -39,6 +40,38 @@ header {
             align-items: center;
             cursor: pointer;
         }
+
+        .signup {
+            cursor: pointer;
+        }
+
+        .signup:hover {
+            text-decoration: underline;
+        }
+
+        .signin {
+            cursor: pointer;
+
+        }
+
+        .signin:hover {
+            text-decoration: underline;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .photo {
+                img {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                }
+            }
+        }
     }
+
 
 }
