@@ -2,24 +2,30 @@
     // padding: 70px;  
     justify-content: center;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
-    grid-auto-rows: 320px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 320px));
+    grid-auto-rows: 350px;
     gap: 25px;
     padding-top: 25px;
 
     .foodItemCard {
         // background-color: black;
+        height: 100%;
         width: 100%;
         color: black;
         display: flex;
         // background-color: blue;
+        // padding-top: 10px;
         flex-direction: column;
         align-items: center;
+        border: 1px solid rgba(0, 0, 0, 0.134);
+        border-radius: 5px;
 
         img {
             height: 200px;
-            width: 300px;
-            border-radius: 5px;
+
+            // width: 300px;
+            width: 100%;
+            // border-radius: 5px;
         }
 
         .info {
@@ -27,6 +33,7 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            padding-top: 15px;
 
             .grouped {
                 .grouped2 {
@@ -43,11 +50,12 @@
                     .addButton {
                         width: 50px;
                         height: 20px;
+                        border: 1px solid rgba(0, 0, 0, 0.4);
                     }
 
                     .addRemoveButtons {
                         display: flex;
-                        border: 1px solid black;
+                        border: 1px solid rgba(0, 0, 0, 0.332);
                         border-radius: 8px;
                         width: 50px;
                         height: 20px;
@@ -71,7 +79,7 @@
                     }
 
                     button:hover {
-                        background-color: rgb(31, 176, 31);
+                        background-color: rgb(83, 200, 83);
                         color: white;
                     }
                 }

@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import "./RestaurantForm.scss";
 export default function RestaurantForm()
 {
     const [formData,setFormData] = useState({
@@ -8,10 +9,26 @@ export default function RestaurantForm()
         email : "",
         coverPhoto : null,
         description : "", 
-        latitude : 0,
-        longitude: 0, 
         location : "",
     }); 
+    // const [coordinates,setCoordinates] = useState({
+    //     longitude : 0, 
+    //     latitude : 0,
+    // });
+    // const [loc,setLoc] = useState(false); 
+    // if(loc)
+    // {
+    //     // send a get request to backend to fetch the coordinates corresponding the current location 
+    //     // then use those coordinates to set the map
+    // }
+    // useEffect(()=>{
+    //     mapboxgl.accessToken = 'pk.eyJ1IjoiYXJnaGFkZWVwZDIzIiwiYSI6ImNsc3R5bGhjYzF6aTMya21yeXE5N3N2cmUifQ.PGunE0SZj-11ARFvi2ub0Q';
+    //     const map = new mapboxgl.Map({
+    //     container: 'map', // container ID
+    //     center: [-74.5, 40], // starting position [lng, lat]
+    //     zoom: 9 // starting zoom
+    //     });
+    // },[coordinates])
     const createRestaurant = async (restaurant)=>{
         try{
             // GET request to backend to fetch the presigned URL to put the image in S3
@@ -29,9 +46,7 @@ export default function RestaurantForm()
                 name : restaurant.name, 
                 category : restaurant.category,
                 phone : restaurant.phone,
-                email : restaurant.email,
-                latitude : restaurant.latitude, 
-                longitude : restaurant.longitude , 
+                email : restaurant.email, 
                 description : restaurant.description, 
                 location : restaurant.location,  
                 coverPhotoURL : coverPhotoURL
@@ -73,8 +88,6 @@ export default function RestaurantForm()
             name : "", 
             phone : "", 
             email : "",
-            latitude : 0, 
-            longitude : 0, 
             description : "", 
             coverPhoto : null , 
             category : "", 
@@ -95,6 +108,9 @@ export default function RestaurantForm()
                         <label htmlFor="location">Enter Location : </label>
                         <input type="text" name="location" placeholder="Location" id="location" value={formData.location} onChange={(event)=>handleInputChange('location',event)}/>
                     </div>
+                    {/* { 
+                        <div id="map"></div> 
+                    } */}
                     <div className="take">
                         <label htmlFor="category">Enter Category : </label>
                         <input type="text" name="category" placeholder="Category" id="category" value={formData.category} onChange={(event)=>handleInputChange('category',event)}/>
@@ -102,14 +118,6 @@ export default function RestaurantForm()
                     <div className="take">
                         <label htmlFor="description">Enter Description : </label>
                         <textarea name="description" id="description" cols="10" rows="5" value={formData.description} onChange={(event)=>handleInputChange('description',event)}></textarea>
-                    </div>
-                    <div className="take">
-                        <label htmlFor="latitude">Enter Latitude : </label>
-                        <input type="text" name="latitude" placeholder="Latitude" id="latitude" value={formData.latitude} onChange={(event)=>handleInputChange('latitude',event)}/>
-                    </div>
-                    <div className="take">
-                        <label htmlFor="longitude">Enter Latitude : </label>
-                        <input type="text" name="longitude" placeholder="Longitude" id="longitude" value={formData.longitude} onChange={(event)=>handleInputChange('longitude',event)}/>
                     </div>
                     <div className="take">
                         <label htmlFor="phone">Enter Phone Number : </label>

@@ -18,6 +18,11 @@ const ACCESS_KEYID = process.env.ACCESS_KEYID
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY
 const REGION = process.env.REGION
 const BUCKET_NAME = process.env.BUCKET_NAME
+
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapboxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapboxToken });  // has 2 methods : forward and reverse geocode
+
 const s3Client = new S3Client(
     {
         // user : 'argha2'
@@ -85,6 +90,14 @@ app.post('/uploads', async (req, res) => {
 });
 app.post('/uploadRestaurant', async (req, res) => {
     const newRestaurant = new restaurant(req.body);
+    const location = newRestaurant.location;
+    const geoData = await geocoder.forwardGeocode({
+        query: location,
+        limit: 1
+    }).send();
+    console.log(geoData.body.features[0].geometry.coordinates);
+    // coordinates are stored in the form of longitude, latitude : GeoJSON entity
+    newRestaurant.geometry = geoData.body.features[0].geometry;
     try {
         await newRestaurant.save();
         res.send("Data has been submitted to the database");
@@ -104,6 +117,8 @@ app.get('/uploads', async (req, res) => {
     }
 });
 app.get('/restaurants', async (req, res) => {
+
+    // res.send("OK!!");
     try {
         const restaurants = await restaurant.find();
         res.json(restaurants);

@@ -3,7 +3,7 @@ import "./Navbar.scss";
 import {CartContext} from "../store/CartContext.jsx";
 import {useContext,useState,useRef} from "react"; 
 import DropDownMenu from './DropDownMenu.jsx';
-export default function Navbar()
+export default function Navbar({needed})
 {
     const cartCtx = useContext(CartContext);
     const [cartOpen,setCartOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Navbar()
                 <div className="left">
                     <span>FoodJunction</span>
                 </div>
-                <div className ="right"> 
+                {needed && <div className ="right"> 
                     {/* change to onMouseEnter and onMouseLeave*/}
                     <div className="cart" onClick={handleOnClick} > 
                         <AddShoppingCartIcon/>
@@ -39,7 +39,7 @@ export default function Navbar()
                         </p>
                     </div>
                     {cartOpen && <DropDownMenu hande/>}
-                </div>
+                </div>}
             </header>
         </>
     )
