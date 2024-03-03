@@ -45,6 +45,23 @@ function App() {
   useEffect(() => {
     localStorage.setItem("ordersMap", JSON.stringify(Array.from(ordersMap)));
   }, [ordersMap]);
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      // check if user exists in the database
+      async function registerUser() {
+        const response = await fetch("http://localhost:3000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(user),
+        })
+        const data = await response.json();
+        console.log(data);
+      }
+      registerUser();
+    }
+  }, [isAuthenticated, user])
   const [overallQuantity, setOverallQuantity] = useState(0);
   function handleAddItemToCart(food) {
     setOverallQuantity((prevQuantity) => prevQuantity + 1);

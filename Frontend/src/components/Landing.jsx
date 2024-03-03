@@ -42,6 +42,9 @@ export default function Landing() {
         }
         fetchRestaurants();
     }, []);
+    useEffect(() => {
+
+    }, [])
     const responsive = {
         superLargeDesktop: {
             // the naming can be any, depends on you.
@@ -69,7 +72,7 @@ export default function Landing() {
         <div className="landing">
             <div className="greet">
                 <h2>
-                    {isAuthenticated ? user.given_name : "User"}, What's on your mind ?{" "}
+                    {isAuthenticated ? user.given_name ? user.given_name : user.nickname : "User"}, What's on your mind ?{" "}
                 </h2>
             </div>
             <div className="carousel">
@@ -162,7 +165,7 @@ export default function Landing() {
             <div className="restaurants">
                 {restaurants.map((restaurant, index) => {
                     return (
-                        <Link to={`/${restaurant._id}/menu`} style={{ textDecoration: 'none' }}>
+                        <Link to={`/${restaurant._id}/menu`} style={{ textDecoration: 'none' }} key={index}>
                             <div className="restaurantCard" key={index}>
                                 <img src={restaurant.coverPhotoURL} alt={restaurant.name} />
                                 <div className="info">

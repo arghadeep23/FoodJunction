@@ -126,6 +126,34 @@ app.get('/restaurants', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+app.post('/register', async (req, res) => {
+    const { email } = req.body;
+    //check if email already exists : 
+    try {
+        const existingUser = await user.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+        // Create a new user document
+        // const { nickname, picture } = req.body;
+        const newUser = new user(req.body);
+
+        // Save the new user document to the database
+        await newUser.save();
+        res.status(201).json(newUser);
+    }
+    catch (error) {
+        console.error('Error saving user info:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+    // const newUser = new user(req.body);
+    // try {
+    //     await newUser.save();
+    //     res.send("User has been registered");
+    // } catch (err) {
+    //     res.status(409).json({ message: err.message });
+    // }
+});
 app.listen(3000, () => {
     console.log('Server started at port 3000');
 });
