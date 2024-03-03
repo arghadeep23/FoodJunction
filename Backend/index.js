@@ -14,6 +14,13 @@ const user = require("./models/User.js")
 const rating = require("./models/Rating.js");
 const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+var transporter = nodemailer.createTransport(sendgridTransport({
+    auth: {
+        api_key: process.env.SENDGRID_APIKEY
+    }
+}));
 const ACCESS_KEYID = process.env.ACCESS_KEYID
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY
 const REGION = process.env.REGION
@@ -140,19 +147,24 @@ app.post('/register', async (req, res) => {
 
         // Save the new user document to the database
         await newUser.save();
+        // Send welcome email
+        try {
+            await transporter.sendMail({
+                to: email,
+                from: 'deyarghadeep23@gmail.com',
+                subject: 'Welcome to FoodJunction!',
+                html: '<h1>You have successfully been registered!</h1>'
+            });
+        } catch (emailError) {
+            console.error('Error sending email:', emailError);
+            // You can choose to handle the email sending error differently, e.g., send a response to the client indicating that the email failed to send.
+        }
         res.status(201).json(newUser);
     }
     catch (error) {
         console.error('Error saving user info:', error);
         res.status(500).json({ message: 'Server error' });
     }
-    // const newUser = new user(req.body);
-    // try {
-    //     await newUser.save();
-    //     res.send("User has been registered");
-    // } catch (err) {
-    //     res.status(409).json({ message: err.message });
-    // }
 });
 app.listen(3000, () => {
     console.log('Server started at port 3000');

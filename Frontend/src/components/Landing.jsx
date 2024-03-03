@@ -25,6 +25,7 @@ import Desserts from "../assets/desserts.png";
 import Healthy from "../assets/healthy.png";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Fragment } from "react";
+import Logout from './Logout.jsx'
 export default function Landing() {
     const { user, isAuthenticated, isLoading } = useAuth0();
     const [restaurants, setRestaurants] = useState([]);
@@ -178,6 +179,7 @@ export default function Landing() {
                     );
                 })}
             </div>
+            <Logout />
         </div>
     );
 }

@@ -52,7 +52,7 @@ export default function Navbar({ needed }) {
                                 <img src={user.picture} alt="" />
                             </div>
                             <div className="name">
-                                <span>{user.given_name ? user.given_name : user.name}</span>
+                                <span>{user.given_name ? user.given_name : user.nickname}</span>
                             </div>
                         </div>
                     }
