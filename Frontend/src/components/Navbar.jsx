@@ -37,7 +37,6 @@ export default function Navbar({ needed }) {
                     </Link>
                 </div>
                 <div className="right">
-
                     {
                         !isAuthenticated && <><div className="signin" onClick={() => loginWithRedirect()}>
                             <span>Sign In</span>
@@ -56,7 +55,7 @@ export default function Navbar({ needed }) {
                             </div>
                         </div>
                     }
-                    {needed &&
+                    {needed && isAuthenticated &&
                         <div className="cart" onClick={handleOnClick} >
                             <AddShoppingCartIcon />
                             <p>

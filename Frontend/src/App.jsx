@@ -19,9 +19,11 @@ import {
 } from "react-router-dom";
 
 function App() {
-  // const [shoppingCart,setShoppingCart] = useState({
-  //   items : [],
-  // })
+  const [userId, setUserId] = useState(() => {
+    const storedId = localStorage.getItem("userId");
+    return storedId ? storedId : null;
+  });
+  console.log(userId);
   const { user, isAuthenticated } = useAuth0();
   console.log("Current user", user);
   const [shoppingCart, setShoppingCart] = useState(() => {
@@ -32,7 +34,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(shoppingCart.items));
   }, [shoppingCart]);
-  // const [ordersMap, setOrdersMap] = useState(new Map());
 
   const [ordersMap, setOrdersMap] = useState(() => {
     const storedMap = localStorage.getItem("ordersMap");
@@ -58,6 +59,9 @@ function App() {
         })
         const data = await response.json();
         console.log(data);
+        setUserId(data);
+        // store the user id in local storage
+        localStorage.setItem("userId", data);
       }
       registerUser();
     }
@@ -165,10 +169,13 @@ function App() {
     {
       path: "/:id/menu",
       element: (
-        <CartContext.Provider value={cartCtx}>
-          <Navbar needed={true} />
-          <Home />
-        </CartContext.Provider>
+        <Login2
+          element={
+            <CartContext.Provider value={cartCtx}>
+              <Navbar needed={true} />
+              <Home />
+            </CartContext.Provider>
+          } />
       ),
     },
     {

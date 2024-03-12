@@ -1,10 +1,11 @@
-import {createContext} from "react"; 
+import { createContext } from "react";
 export const CartContext = createContext(
     {
-        items : [] ,
-        overallQuantity : 0,
-        addItemToCart : (item)=>{},
-        removeItemFromCart : (item)=>{},
+        userId: null,
+        items: [],
+        overallQuantity: 0,
+        addItemToCart: (item) => { },
+        removeItemFromCart: (item) => { },
         ordersMap: new Map(),
     }
 );

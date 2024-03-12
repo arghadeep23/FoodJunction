@@ -8,10 +8,14 @@ const promisify = require('util').promisify;
 const randomBytes = promisify(crypto.randomBytes);
 const connectdb = require("./models/db.js");
 connectdb();
+
+// requiring the schema and model for our data
 const food = require("./models/FoodSchema.js");
 const restaurant = require("./models/CompanySchema.js");
 const user = require("./models/User.js")
 const rating = require("./models/Rating.js");
+const cart = require("./models/Cart.js");
+
 const { S3Client, GetObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const nodemailer = require('nodemailer');
@@ -55,7 +59,6 @@ async function generateUploadURL(contentType) // provides the url for the image 
     // return null;
 }
 // // Middleware for parsing JSON bodies
-// app.use(express.json());
 const corsOptions = {
     origin: '*',
     methods: 'GET, POST, PUT',
@@ -64,11 +67,7 @@ const corsOptions = {
     exposedHeaders: 'Content-Range,X-Content- Range'
 };
 app.use(cors(corsOptions));
-// // app.use(bodyParser.json({ limit: '1mb' }));
 
-// // app.use(multer({
-// //     dest: 'images'
-// // }).single('image'));
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -95,6 +94,8 @@ app.post('/uploads', async (req, res) => {
         res.status(409).json({ message: err.message })
     }
 });
+
+
 app.post('/uploadRestaurant', async (req, res) => {
     const newRestaurant = new restaurant(req.body);
     const location = newRestaurant.location;
@@ -123,9 +124,8 @@ app.get('/uploads', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-app.get('/restaurants', async (req, res) => {
 
-    // res.send("OK!!");
+app.get('/restaurants', async (req, res) => {
     try {
         const restaurants = await restaurant.find();
         res.json(restaurants);
@@ -133,13 +133,14 @@ app.get('/restaurants', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
 app.post('/register', async (req, res) => {
     const { email } = req.body;
     //check if email already exists : 
     try {
         const existingUser = await user.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(200).json(existingUser._id);
         }
         // Create a new user document
         // const { nickname, picture } = req.body;
@@ -159,13 +160,42 @@ app.post('/register', async (req, res) => {
             console.error('Error sending email:', emailError);
             // You can choose to handle the email sending error differently, e.g., send a response to the client indicating that the email failed to send.
         }
-        res.status(201).json(newUser);
+        res.status(201).json(newUser._id);
     }
     catch (error) {
         console.error('Error saving user info:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+app.post('/add-to-cart', async (req, res) => {
+    const { userId, foodItemId } = req.body;
+    try {
+        let userCart = await cart.findOne({ user: userId });
+        // If cart doesn't exist, create a new one
+        if (!cart) {
+            userCart = new cart({ user: userId, items: [] });
+        }
+        const existingItemIndex = userCart.items.findIndex(item => item.foodItemId.equals(foodItemId));
+
+        if (existingItemIndex !== -1) {
+            // If the item already exists, increment its quantity
+            userCart.items[existingItemIndex].quantity++;
+        } else {
+            // If the item is not in the cart, add it
+            userCart.items.push({ foodItemId, quantity: 1 });
+        }
+
+        // Save the updated cart
+        await userCart.save();
+        res.status(200).json({ message: 'Item added to cart successfully' });
+    }
+    catch (error) {
+        console.error('Error saving user cart:', error);
+        res.status(500).json({ message: 'Server error' });
+
+    }
+})
 app.listen(3000, () => {
     console.log('Server started at port 3000');
 });
