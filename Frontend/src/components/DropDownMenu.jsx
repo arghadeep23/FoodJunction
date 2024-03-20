@@ -1,14 +1,9 @@
 import "./DropDownMenu.scss"
-import {useContext} from "react"; 
-import {CartContext} from "../store/CartContext";
 import DropDownItem from "./DropDownItem.jsx";
-export default function DropDownMenu()
-{
-    const cartCtx = useContext(CartContext);
-    
+export default function DropDownMenu() {
     return (
         <div className="dropdown">
-            <DropDownItem/>
+            <DropDownItem />
         </div>
     )
 }

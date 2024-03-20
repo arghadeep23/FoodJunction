@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./FoodItems.scss";
 export default function FoodItems() {
     const [foodItems, setFoodItems] = useState([]);
-    const { addItemToCart, ordersMap, removeItemFromCart } =
+    const { addItemToCart, removeItemFromCart, ordersMap } =
         useContext(CartContext);
     const restaurantId = useParams().id;
     useEffect(() => {
@@ -13,10 +13,9 @@ export default function FoodItems() {
                 const foods = await fetch("http://localhost:3000/uploads").then(
                     (response) => response.json()
                 );
-                // console.log(foods);
                 setFoodItems(foods);
             } catch (error) {
-                console.log(e);
+                console.log(error);
             }
         }
         fetchFood();

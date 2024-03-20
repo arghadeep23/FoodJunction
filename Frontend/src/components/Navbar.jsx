@@ -1,7 +1,7 @@
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import "./Navbar.scss";
 import { CartContext } from "../store/CartContext.jsx";
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import DropDownMenu from './DropDownMenu.jsx';
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -9,25 +9,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 export default function Navbar({ needed }) {
     const cartCtx = useContext(CartContext);
     const [cartOpen, setCartOpen] = useState(false);
-    const timeoutRef = useRef(null);
     const { user, loginWithRedirect, isAuthenticated } = useAuth0();
-
     function handleOnClick() {
         setCartOpen((prev) => !prev);
     }
-    const handleMouseEnter = () => {
-        setCartOpen(true);
-    };
-
-    // const handleMouseLeave = () => {
-    //     setCartOpen(false);
-    // };
-    const handleMouseLeave = () => {
-        timeoutRef.current = setTimeout(() => {
-            setCartOpen(false);
-        }, 200); // Set a delay before hiding the dropdown
-    };
-
     return (
         <>
             <header>
@@ -61,13 +46,9 @@ export default function Navbar({ needed }) {
                             <p>
                                 Cart ({cartCtx.overallQuantity})
                             </p>
-                            {cartOpen && <DropDownMenu hande />}
+                            {cartOpen && <DropDownMenu />}
                         </div>
                     }
-                    {/* <div className="signin" onClick={() => loginWithRedirect()}>
-                        <span>Sign In</span>
-                    </div> */}
-
                 </div>
             </header>
         </>

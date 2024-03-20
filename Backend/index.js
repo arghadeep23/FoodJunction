@@ -61,7 +61,7 @@ async function generateUploadURL(contentType) // provides the url for the image 
 // // Middleware for parsing JSON bodies
 const corsOptions = {
     origin: '*',
-    methods: 'GET, POST, PUT',
+    methods: 'GET, POST, PUT, DELETE',
     credentials: true,
     allowedHeaders: 'Content-Type,Authorization',
     exposedHeaders: 'Content-Range,X-Content- Range'
@@ -167,13 +167,33 @@ app.post('/register', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+// endpoint for fetching user cart
+app.get('/cart/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const userCart = await cart.findOne({ user: userId });
+        if (userCart) {
+            res.status(200).json(userCart.items);
+        } else {
+            res.status(200).json([]);
+        }
+    }
+    catch (error) {
+        console.error('Error fetching user cart:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+);
 
 app.post('/add-to-cart', async (req, res) => {
-    const { userId, foodItemId } = req.body;
+    const { userId, foodItemId, price, name } = req.body;
+    console.log(userId);
+    console.log(foodItemId);
+    console.log()
     try {
         let userCart = await cart.findOne({ user: userId });
         // If cart doesn't exist, create a new one
-        if (!cart) {
+        if (!userCart) {
             userCart = new cart({ user: userId, items: [] });
         }
         const existingItemIndex = userCart.items.findIndex(item => item.foodItemId.equals(foodItemId));
@@ -181,9 +201,11 @@ app.post('/add-to-cart', async (req, res) => {
         if (existingItemIndex !== -1) {
             // If the item already exists, increment its quantity
             userCart.items[existingItemIndex].quantity++;
+            userCart.items[existingItemIndex].price = price;
+            userCart.items[existingItemIndex].name = name;
         } else {
             // If the item is not in the cart, add it
-            userCart.items.push({ foodItemId, quantity: 1 });
+            userCart.items.push({ foodItemId, quantity: 1, price, name });
         }
 
         // Save the updated cart
@@ -196,6 +218,27 @@ app.post('/add-to-cart', async (req, res) => {
 
     }
 })
+
+app.delete('/remove-from-cart', async (req, res) => {
+    // console.log("request to delete");
+    const { foodItemId, userId } = req.body;
+    try {
+        let userCart = await cart.findOne({ user: userId });
+        const existingItemIndex = userCart.items.findIndex(item => item.foodItemId.equals(foodItemId));
+        if (existingItemIndex !== -1) {
+            userCart.items[existingItemIndex].quantity--;
+            if (userCart.items[existingItemIndex].quantity === 0) {
+                userCart.items.splice(existingItemIndex, 1);
+            }
+        }
+        await userCart.save();
+        res.status(200).json({ message: 'Item removed from cart successfully' });
+    } catch (error) {
+        console.error('Error removing item from cart:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server started at port 3000');
 });

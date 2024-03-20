@@ -19,33 +19,16 @@ import {
 } from "react-router-dom";
 
 function App() {
+
   const [userId, setUserId] = useState(() => {
     const storedId = localStorage.getItem("userId");
     return storedId ? storedId : null;
   });
-  console.log(userId);
-  const { user, isAuthenticated } = useAuth0();
-  console.log("Current user", user);
-  const [shoppingCart, setShoppingCart] = useState(() => {
-    const storedCart = localStorage.getItem("items");
-    const parsedCart = storedCart ? JSON.parse(storedCart) : [];
-    return { items: parsedCart };
-  });
-  useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(shoppingCart.items));
-  }, [shoppingCart]);
 
-  const [ordersMap, setOrdersMap] = useState(() => {
-    const storedMap = localStorage.getItem("ordersMap");
-    if (storedMap) {
-      return new Map(JSON.parse(storedMap));
-    } else {
-      return new Map();
-    }
-  });
-  useEffect(() => {
-    localStorage.setItem("ordersMap", JSON.stringify(Array.from(ordersMap)));
-  }, [ordersMap]);
+  const { user, isAuthenticated } = useAuth0();
+  const [overallQuantity, setOverallQuantity] = useState(0);
+  const [ordersMap, setOrdersMap] = useState(new Map());
+
   useEffect(() => {
     if (isAuthenticated && user) {
       // check if user exists in the database
@@ -58,7 +41,6 @@ function App() {
           body: JSON.stringify(user),
         })
         const data = await response.json();
-        console.log(data);
         setUserId(data);
         // store the user id in local storage
         localStorage.setItem("userId", data);
@@ -66,81 +48,89 @@ function App() {
       registerUser();
     }
   }, [isAuthenticated, user])
-  const [overallQuantity, setOverallQuantity] = useState(0);
-  function handleAddItemToCart(food) {
-    setOverallQuantity((prevQuantity) => prevQuantity + 1);
-    setShoppingCart((prevShoppingCart) => {
-      const cartItems = [...prevShoppingCart.items];
-      const index = cartItems.findIndex((item) => item._id === food._id);
-      if (index === -1) {
-        cartItems.push({ ...food, quantity: 1 });
-      } else {
-        // can't mutate the state directly, so we create a new object and then update the state with it
-        // cartItems[index].quantity+=1;
-        cartItems[index] = {
-          ...cartItems[index],
-          quantity: cartItems[index].quantity + 1,
-        };
+
+
+  const [shoppingCart, setShoppingCart] = useState([]);
+  useEffect(() => {
+    async function fetchCart() {
+      try {
+        const cart = await fetch(`http://localhost:3000/cart/${userId}`).then((response) => response.json());
+        setShoppingCart(cart);
+        setOverallQuantity(cart.reduce((acc, item) => acc + item.quantity, 0));
+        setOrdersMap(new Map(cart.map((item) => [item._id, item.quantity])));
+      } catch (e) {
+        console.log(e);
       }
-      console.log(cartItems);
-      return {
-        items: cartItems,
-      };
+    }
+    fetchCart();
+  }, []);
+  console.log("shoppingCart", shoppingCart);
+  function handleAddItemToCart(item) {
+    const updatedCart = [...shoppingCart];
+    const index = updatedCart.findIndex((i) => i._id === item._id);
+    if (index >= 0) {
+      updatedCart[index].quantity++;
+    } else {
+      updatedCart.push({ ...item, quantity: 1 });
+    }
+    setOverallQuantity((prev) => prev + 1);
+    setOrdersMap((prev) => {
+      const newMap = new Map(prev);
+      if (newMap.has(item._id)) {
+        newMap.set(item._id, newMap.get(item._id) + 1);
+      } else {
+        newMap.set(item._id, 1);
+      }
+      return newMap;
     });
-    setOrdersMap((prevMapState) => {
-      // Create a new Map based on the previous state to avoid mutating it directly
-      const updatedMap = new Map(prevMapState);
-      // Get the current count for the food item
-      const currentCount = updatedMap.get(food._id);
-      // If the food item exists in the map, update its count
-      if (currentCount !== undefined) {
-        updatedMap.set(food._id, currentCount + 1); // Update the count for the food item
-      } else {
-        // Food item doesn't exist in the map, add it with the new count
-        updatedMap.set(food._id, 1);
-      }
-      return updatedMap; // Return the updated Map
+    setShoppingCart(updatedCart);
+    fetch("http://localhost:3000/add-to-cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId: userId, foodItemId: item._id, price: item.price, name: item.name }),
     });
   }
-  function handleRemoveItemFromCart(food) {
-    setOverallQuantity((prevQuantity) => prevQuantity - 1);
-    setShoppingCart((prevShoppingCart) => {
-      const cartItems = [...prevShoppingCart.items];
-      const index = cartItems.findIndex((item) => item._id === food._id);
-      const itemQuantity = cartItems[index].quantity;
-      if (itemQuantity == 1) {
-        cartItems.splice(index, 1);
-      } else {
-        cartItems[index] = { ...cartItems[index], quantity: itemQuantity - 1 };
+  function handleRemoveItemFromCart(item) {
+    const updatedCart = [...shoppingCart];
+    const index = updatedCart.findIndex((i) => i._id === item._id);
+    if (index >= 0) {
+      updatedCart[index].quantity--;
+      if (updatedCart[index].quantity === 0) {
+        updatedCart.splice(index, 1);
       }
-      return {
-        items: cartItems,
-      };
-    });
-    setOrdersMap((prevMapState) => {
-      // Create a new Map based on the previous state to avoid mutating it directly
-      const updatedMap = new Map(prevMapState);
-      // Get the current count for the food item
-      const currentCount = updatedMap.get(food._id);
-      // If the food item exists in the map, update its count
-      if (currentCount > 1) {
-        updatedMap.set(food._id, currentCount - 1); // Update the count for the food item
-      } else {
-        // Food item doesn't exist in the map, add it with the new count
-        updatedMap.delete(food._id);
-      }
-      return updatedMap; // Return the updated Map
+      setOverallQuantity((prev) => prev - 1);
+      setOrdersMap((prev) => {
+        const newMap = new Map(prev);
+        let orderAmount = newMap.get(item._id);
+        if (orderAmount > 1) {
+          newMap.set(item._id, newMap.get(item._id) - 1);
+        } else {
+          newMap.delete(item._id);
+        }
+        return newMap;
+      });
+    }
+    else {
+      return;
+    }
+    setShoppingCart(updatedCart);
+    fetch("http://localhost:3000/remove-from-cart", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userId: userId, foodItemId: item._id }),
     });
   }
   const cartCtx = {
-    items: shoppingCart.items,
+    userId: userId,
+    items: shoppingCart,
     addItemToCart: handleAddItemToCart,
-    overallQuantity: shoppingCart.items.reduce(
-      (acc, item) => acc + item.quantity,
-      0
-    ),
-    ordersMap: ordersMap,
     removeItemFromCart: handleRemoveItemFromCart,
+    overallQuantity: overallQuantity,
+    ordersMap: ordersMap
   };
   const router = createBrowserRouter([
     {
