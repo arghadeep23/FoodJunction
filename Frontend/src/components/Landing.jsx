@@ -1,4 +1,4 @@
-import "./Landing.scss";
+import "../styles/Landing.scss";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
@@ -171,7 +171,7 @@ export default function Landing() {
                                 <img src={restaurant.coverPhotoURL} alt={restaurant.name} />
                                 <div className="info">
                                     <div className="grouped">
-                                        <h3>{restaurant.name}</h3>
+                                        <h4>{restaurant.name}</h4>
                                     </div>
                                 </div>
                             </div>

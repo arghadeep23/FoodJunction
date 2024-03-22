@@ -1,3 +1,22 @@
+.banner {
+    padding-top: 25px;
+    padding-left: 80px;
+    display: flex;
+    gap: 150px;
+
+    .restaurantInfo {
+        font-family: "Inter", sans-serif;
+
+        .restaurantDescription {
+            margin-top: 25px;
+            width: 800px;
+            line-height: 1.2;
+        }
+    }
+
+
+}
+
 .foodItems {
     // padding: 70px;  
     justify-content: center;
@@ -6,6 +25,8 @@
     grid-auto-rows: 350px;
     gap: 25px;
     padding-top: 25px;
+
+
 
     .foodItemCard {
         // background-color: black;
@@ -19,6 +40,7 @@
         align-items: center;
         border: 1px solid rgba(0, 0, 0, 0.134);
         border-radius: 5px;
+        font-family: 'Inter', sans-serif;
 
         img {
             height: 200px;
@@ -34,6 +56,10 @@
             flex-direction: column;
             gap: 10px;
             padding-top: 15px;
+
+            h3 {
+                font-family: 'Inter', sans-serif;
+            }
 
             .grouped {
                 .grouped2 {
@@ -80,6 +106,7 @@
                 .price {
                     font-weight: bold;
                 }
+
             }
         }
     }

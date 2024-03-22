@@ -239,6 +239,16 @@ app.delete('/remove-from-cart', async (req, res) => {
     }
 });
 
+app.get('/restaurant/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const resturant = await restaurant.findById(id);
+        res.status(200).json(resturant);
+    } catch (error) {
+        console.error('Error fetching resturant:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+})
 app.listen(3000, () => {
     console.log('Server started at port 3000');
 });

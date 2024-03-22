@@ -1,18 +1,25 @@
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../store/CartContext.jsx";
 import { useParams } from "react-router-dom";
-import "./FoodItems.scss";
+import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import "../styles/FoodItems.scss";
+import MyMap from "./MyMap.jsx";
 export default function FoodItems() {
+    // var map = L.map('map').setView([51.505, -0.09], 13); 
     const [foodItems, setFoodItems] = useState([]);
     const { addItemToCart, removeItemFromCart, ordersMap } =
         useContext(CartContext);
     const restaurantId = useParams().id;
+    const [restaurantDetails, setRestaurantDetails] = useState();
     useEffect(() => {
         async function fetchFood() {
             try {
                 const foods = await fetch("http://localhost:3000/uploads").then(
                     (response) => response.json()
                 );
+                const restaurant = await fetch(`http://localhost:3000/restaurant/${restaurantId}`).then((response) => response.json());
+                console.log(restaurant.geometry.coordinates[1]);
+                setRestaurantDetails(restaurant);
                 setFoodItems(foods);
             } catch (error) {
                 console.log(error);
@@ -22,7 +29,21 @@ export default function FoodItems() {
     }, []);
     return (
         <>
-            <h3>Restaurant : {restaurantId}</h3>
+            {/* <h3>Restaurant : {restaurantId}</h3> */}
+            {
+                restaurantDetails &&
+                <div className="banner">
+                    <div className="restaurantInfo">
+                        <h2>{restaurantDetails.name}</h2>
+                        <p>5 ⭐ | {restaurantDetails.category} | {restaurantDetails.location}</p>
+                        <div className="restaurantDescription">
+                            <p>{restaurantDetails.description}</p>
+                        </div>
+                    </div>
+                    <div className="moreDetails">
+                        <MyMap name={restaurantDetails.name} latitude={restaurantDetails.geometry.coordinates[1]} longitude={restaurantDetails.geometry.coordinates[0]} />
+                    </div>
+                </div>}
             <div className="foodItems">
                 {foodItems.map((food, index) => {
                     return (

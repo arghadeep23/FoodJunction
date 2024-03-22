@@ -1,5 +1,5 @@
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import "./Navbar.scss";
+import "../styles/Navbar.scss";
 import { CartContext } from "../store/CartContext.jsx";
 import { useContext, useState, useRef, useEffect } from "react";
 import DropDownMenu from './DropDownMenu.jsx';

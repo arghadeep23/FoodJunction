@@ -17,6 +17,7 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
+import MyMap from "./components/MyMap.jsx";
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
   const { user, isAuthenticated } = useAuth0();
   const [overallQuantity, setOverallQuantity] = useState(0);
   const [ordersMap, setOrdersMap] = useState(new Map());
-
+  console.log(ordersMap);
   useEffect(() => {
     if (isAuthenticated && user) {
       // check if user exists in the database
@@ -52,18 +53,19 @@ function App() {
 
   const [shoppingCart, setShoppingCart] = useState([]);
   useEffect(() => {
+    if (!userId) return;
     async function fetchCart() {
       try {
         const cart = await fetch(`http://localhost:3000/cart/${userId}`).then((response) => response.json());
         setShoppingCart(cart);
         setOverallQuantity(cart.reduce((acc, item) => acc + item.quantity, 0));
-        setOrdersMap(new Map(cart.map((item) => [item._id, item.quantity])));
+        setOrdersMap(new Map(cart.map((item) => [item.foodItemId, item.quantity])));
       } catch (e) {
         console.log(e);
       }
     }
     fetchCart();
-  }, []);
+  }, [userId]);
   console.log("shoppingCart", shoppingCart);
   function handleAddItemToCart(item) {
     const updatedCart = [...shoppingCart];

@@ -1,4 +1,4 @@
-import "./DropDownMenu.scss"
+import "../styles/DropDownMenu.scss"
 import DropDownItem from "./DropDownItem.jsx";
 export default function DropDownMenu() {
     return (

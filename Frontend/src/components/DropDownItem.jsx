@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../store/CartContext.jsx";
-import "./DropDownItem.scss";
+import "../styles/DropDownItem.scss";
 export default function DropDownItem() {
     const cartCtx = useContext(CartContext);
     return (
@@ -34,7 +34,7 @@ export default function DropDownItem() {
                     </div>
 
                     <div className="total">
-                        {/* <h4><span>Sub-Total:</span> <span>₹{cartCtx.items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</span></h4> */}
+                        <h4><span>Sub-Total:</span> <span>₹{cartCtx.items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</span></h4>
                         <div className="dashed-line"></div>
                         <div className="checkoutButton">
                             <button className="checkout">Checkout</button>
