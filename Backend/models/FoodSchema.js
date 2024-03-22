@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 const foodSchema = new mongoose.Schema({
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        // required : true
+    },
     name: {
         type: String,
         required: true,
@@ -25,9 +29,6 @@ const foodSchema = new mongoose.Schema({
     },
     orders: {
         type: Number,
-    },
-    restaurantId: {
-        type: String,
     },
     category: {
         type: String

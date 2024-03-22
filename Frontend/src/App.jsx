@@ -67,9 +67,9 @@ function App() {
     fetchCart();
   }, [userId]);
   console.log("shoppingCart", shoppingCart);
-  function handleAddItemToCart(item) {
+  async function handleAddItemToCart(item) {
     const updatedCart = [...shoppingCart];
-    const index = updatedCart.findIndex((i) => i._id === item._id);
+    const index = updatedCart.findIndex((i) => i.foodItemId === item._id);
     if (index >= 0) {
       updatedCart[index].quantity++;
     } else {
@@ -86,7 +86,7 @@ function App() {
       return newMap;
     });
     setShoppingCart(updatedCart);
-    fetch("http://localhost:3000/add-to-cart", {
+    await fetch("http://localhost:3000/add-to-cart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -94,9 +94,9 @@ function App() {
       body: JSON.stringify({ userId: userId, foodItemId: item._id, price: item.price, name: item.name }),
     });
   }
-  function handleRemoveItemFromCart(item) {
+  async function handleRemoveItemFromCart(item) {
     const updatedCart = [...shoppingCart];
-    const index = updatedCart.findIndex((i) => i._id === item._id);
+    const index = updatedCart.findIndex((i) => i.foodItemId === item._id);
     if (index >= 0) {
       updatedCart[index].quantity--;
       if (updatedCart[index].quantity === 0) {
@@ -118,7 +118,7 @@ function App() {
       return;
     }
     setShoppingCart(updatedCart);
-    fetch("http://localhost:3000/remove-from-cart", {
+    await fetch("http://localhost:3000/remove-from-cart", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"

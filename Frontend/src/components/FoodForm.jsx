@@ -7,6 +7,7 @@ export default function FoodForm() {
         price: 0,
         type: "veg",
         description: "",
+        restaurantId: "",
         image: null,
     })
     const createFoodItem = async (foodData) => {
@@ -23,6 +24,7 @@ export default function FoodForm() {
             })
             const imageUrl = url.url.split("?")[0];
             const mongoData = {
+                restaurantId: foodData.restaurantId,
                 name: foodData.name,
                 price: foodData.price,
                 type: foodData.type,
@@ -73,6 +75,10 @@ export default function FoodForm() {
                 <div className="centerDiv">
                     <h2>Add Food Item Details</h2>
                     <form action="\form" method="post" onSubmit={handleSubmit}>
+                        <div className="take">
+                            <label htmlFor="restaurantId">Enter restaurant Id : </label>
+                            <input type="text" name="restaurantId" placeholder="Restaurant Id" id="restaurantId" value={formData.restaurantId} onChange={(event) => handleInputChange('restaurantId', event)} />
+                        </div>
                         <div className="take">
                             <label htmlFor="foodName">Enter Food Item Name : </label>
                             <input type="text" name="name" placeholder="Name" id="foodName" value={formData.name} onChange={(event) => handleInputChange('name', event)} />

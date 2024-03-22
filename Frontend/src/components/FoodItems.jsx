@@ -12,13 +12,13 @@ export default function FoodItems() {
     const restaurantId = useParams().id;
     const [restaurantDetails, setRestaurantDetails] = useState();
     useEffect(() => {
+        if (!restaurantId) return;
         async function fetchFood() {
             try {
-                const foods = await fetch("http://localhost:3000/uploads").then(
+                const foods = await fetch(`http://localhost:3000/foods/${restaurantId}`).then(
                     (response) => response.json()
                 );
                 const restaurant = await fetch(`http://localhost:3000/restaurant/${restaurantId}`).then((response) => response.json());
-                console.log(restaurant.geometry.coordinates[1]);
                 setRestaurantDetails(restaurant);
                 setFoodItems(foods);
             } catch (error) {
@@ -27,6 +27,12 @@ export default function FoodItems() {
         }
         fetchFood();
     }, []);
+    function textReducer(text, limit) {
+        if (text.length > limit) {
+            return text.substring(0, limit - 3) + " ...";
+        }
+        return text;
+    }
     return (
         <>
             {/* <h3>Restaurant : {restaurantId}</h3> */}
@@ -51,7 +57,7 @@ export default function FoodItems() {
                             <img src={food.imageURL} alt={food.name} />
                             <div className="info">
                                 <div className="grouped">
-                                    <h3>{food.name}</h3>
+                                    <h3>{textReducer(food.name, 30)}</h3>
                                     <div className="grouped2">
                                         <p className="price">₹{food.price}</p>
                                         {ordersMap.get(food._id) > 0 && (
@@ -81,7 +87,7 @@ export default function FoodItems() {
                                         )}
                                     </div>
                                 </div>
-                                <p>{food.description}</p>
+                                <p className="foodDescription">{textReducer(food.description, 145)}</p>
                             </div>
                         </div>
                     );

@@ -115,10 +115,11 @@ app.post('/uploadRestaurant', async (req, res) => {
     }
 })
 
-// creating a GET endpoint for fetching data from MongoDB
-app.get('/uploads', async (req, res) => {
+// creating a GET endpoint for fetching food data from MongoDB
+app.get('/foods/:id', async (req, res) => {
+    const id = req.params.id;
     try {
-        const foods = await food.find();
+        const foods = await food.find({ restaurantId: id });
         res.json(foods);
     } catch (err) {
         res.status(500).json({ message: err.message });
