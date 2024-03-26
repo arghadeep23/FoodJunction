@@ -1,0 +1,270 @@
+header {
+    font-family: "Rowdies", sans-seriff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+        color: #FF4500;
+        font-weight: bold;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .loginDiv {
+        cursor: pointer;
+    }
+
+    .loginDiv:hover {
+        text-decoration: underline;
+    }
+}
+
+main {
+    padding-top: 50px;
+    background-color: #DE432E;
+
+    .mainBox {
+        display: flex;
+        width: 100%;
+        height: 500px;
+
+        .formDiv {
+            flex: 1;
+            padding: 20px 0 0 20px;
+            // width: 40%;
+            display: flex;
+            flex-direction: column;
+
+
+            .heading {
+                font-family: 'Montserrat', sans-seriff;
+                color: white;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+
+            .childFormDiv {
+                background-color: #FFFFFF;
+                padding: 10px;
+                height: auto;
+                border-radius: 10px;
+                margin-right: 20px;
+
+                // display: flex;
+                // flex-direction: column;
+                // align-items: center;
+
+                h3 {
+                    font-family: 'Inter', sans-seriff;
+                }
+
+                form {
+                    input:hover {
+                        border: 1px solid #FF4500;
+
+                    }
+
+                    textarea:hover {
+                        border: 1px solid #FF4500;
+                    }
+
+                    .takeIt {
+
+                        input,
+                        textarea {
+                            width: 100%;
+
+                            padding: 5px;
+                            font-family: 'Inter', sans-seriff;
+                        }
+
+                        input {
+                            height: 30px;
+                        }
+
+                        textarea {
+                            height: 70px;
+                        }
+
+                        margin-bottom : 8px;
+                    }
+
+                    .takePassword {
+                        display: flex;
+                        gap: 5px;
+
+                        input {
+                            height: 30px;
+                            padding: 5px;
+                            width: calc(100% - 5px);
+                            font-family: 'Inter', sans-seriff;
+                        }
+
+                        margin-bottom : 8px;
+                    }
+
+                    .getStarted {
+                        display: flex;
+                        justify-content: flex-end;
+
+                        button {
+                            height: 30px;
+                            width: 130px;
+                            background-color: #DE432E;
+                            color: white;
+                            border: none;
+                            border-radius: 12px;
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+
+                        button:hover {
+                            background-color: #FF4500;
+
+                        }
+                    }
+                }
+            }
+        }
+
+        .backgroundImgDiv {
+            flex: 1;
+
+            // width: 60%;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+    }
+
+    .belowMain {
+        background-color: #FFF0ED;
+        display: flex;
+        flex-direction: column;
+        height: 430px;
+
+        .heading2 {
+            padding-top: 50px;
+            font-family: 'Montserrat', sans-seriff;
+            color: #DE432E;
+            font-weight: bold;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .gridElements {
+            display: flex;
+            // gap: 10px;
+            justify-content: space-around;
+
+            .gridElement {
+                background-color: #FFFFFF;
+                width: 300px;
+                height: 300px;
+                -webkit-box-shadow: 0px 5px 6px -1px rgba(0, 0, 0, 0.45);
+                -moz-box-shadow: 0px 5px 6px -1px rgba(0, 0, 0, 0.45);
+                box-shadow: 0px 5px 6px -1px rgba(0, 0, 0, 0.45);
+
+                .imgElement {
+                    display: flex;
+                    justify-content: center;
+
+                    img {
+                        width: 290px;
+                        height: 250px;
+                        object-fit: contain;
+                    }
+                }
+
+                .paraDescription {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 50px;
+
+                    p {
+                        font-family: 'Inter', sans-seriff;
+                        font-size: 13px;
+                        color: #000000;
+                        font-weight: bold;
+                        text-align: center;
+                    }
+                }
+
+            }
+        }
+    }
+
+
+}
+
+footer {
+    // margin-top: 50px;
+    background-color: #DE432E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+
+    div {
+        font-family: 'Inter', sans-seriff;
+        color: white;
+        font-size: 13px;
+        font-weight: bold;
+
+    }
+}
+
+@media screen and (max-width : 1250px) {
+    main {
+        .mainBox {
+            flex-direction: column;
+
+            .formDiv {
+                padding: 20px 20px 0 20px;
+                margin-bottom: 20px;
+
+                .childFormDiv {
+                    margin-right: 0;
+                }
+            }
+
+            .backgroundImgDiv {
+                img {
+                    height: 300px;
+                }
+            }
+        }
+
+        .belowMain {
+            height: auto;
+
+            .gridElements {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+
+
+                .gridElement {
+                    width: 40vw;
+
+
+                    .imgElement {
+                        img {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+
+            .gridElements:last-child {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}

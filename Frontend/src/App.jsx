@@ -9,6 +9,7 @@ import Login2 from "./components/Login2.jsx";
 import { CartContext } from "./store/CartContext.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "./components/Profile.jsx";
+import OwnerLanding from "./components/OwnerLanding.jsx";
 import "./App.css";
 import {
   createBrowserRouter,
@@ -73,7 +74,7 @@ function App() {
     if (index >= 0) {
       updatedCart[index].quantity++;
     } else {
-      updatedCart.push({ ...item, quantity: 1 });
+      updatedCart.push({ ...item, quantity: 1, foodItemId: item._id });
     }
     setOverallQuantity((prev) => prev + 1);
     setOrdersMap((prev) => {
@@ -135,20 +136,6 @@ function App() {
     ordersMap: ordersMap
   };
   const router = createBrowserRouter([
-    {
-      path: "/landing",
-      element: (
-        <Login2
-          path="/"
-          element={
-            <CartContext.Provider value={cartCtx}>
-              <Navbar needed={true} />
-              <Home />
-            </CartContext.Provider>
-          }
-        />
-      ),
-    },
     {
       path: "/",
       element: (
@@ -214,6 +201,12 @@ function App() {
         </>
       ),
     },
+    {
+      path: "/ownerLanding",
+      element: (
+        <OwnerLanding />
+      )
+    }
   ]);
   return (
     <>

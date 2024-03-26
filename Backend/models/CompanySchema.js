@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const restaurantSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -41,6 +42,20 @@ const restaurantSchema = new mongoose.Schema({
     },
     coverPhotoURL: {
         type: String,
+    },
+    password: {
+        type: String
+    }
+});
+restaurantSchema.pre('save', async function (next) {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = bcrypt.hash(this.password, salt);
+        this.password = hashedPassword;
+        next();
+    }
+    catch (error) {
+        console.log(error);
     }
 });
 const Restaurant = mongoose.model("Restaurant", restaurantSchema);

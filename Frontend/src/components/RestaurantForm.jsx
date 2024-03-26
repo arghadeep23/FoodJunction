@@ -10,24 +10,6 @@ export default function RestaurantForm() {
         description: "",
         location: "",
     });
-    // const [coordinates,setCoordinates] = useState({
-    //     longitude : 0, 
-    //     latitude : 0,
-    // });
-    // const [loc,setLoc] = useState(false); 
-    // if(loc)
-    // {
-    //     // send a get request to backend to fetch the coordinates corresponding the current location 
-    //     // then use those coordinates to set the map
-    // }
-    // useEffect(()=>{
-    //     mapboxgl.accessToken = 'pk.eyJ1IjoiYXJnaGFkZWVwZDIzIiwiYSI6ImNsc3R5bGhjYzF6aTMya21yeXE5N3N2cmUifQ.PGunE0SZj-11ARFvi2ub0Q';
-    //     const map = new mapboxgl.Map({
-    //     container: 'map', // container ID
-    //     center: [-74.5, 40], // starting position [lng, lat]
-    //     zoom: 9 // starting zoom
-    //     });
-    // },[coordinates])
     const createRestaurant = async (restaurant) => {
         try {
             // GET request to backend to fetch the presigned URL to put the image in S3

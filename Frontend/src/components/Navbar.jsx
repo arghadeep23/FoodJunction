@@ -23,7 +23,7 @@ export default function Navbar({ needed }) {
                 </div>
                 <div className="right">
                     {
-                        !isAuthenticated && <><div className="signin" onClick={() => loginWithRedirect()}>
+                        needed && !isAuthenticated && <><div className="signin" onClick={() => loginWithRedirect()}>
                             <span>Sign In</span>
                         </div>
                             <div className="signup" onClick={() => loginWithRedirect()}>
@@ -31,7 +31,7 @@ export default function Navbar({ needed }) {
                             </div></>
                     }
                     {
-                        isAuthenticated && <div className="profile">
+                        needed && isAuthenticated && <div className="profile">
                             <div className="photo">
                                 <img src={user.picture} alt="" />
                             </div>

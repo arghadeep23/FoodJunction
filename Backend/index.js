@@ -76,7 +76,7 @@ app.get('/', (req, res) => {
 
 app.get('/s3URL', async (req, res) => {
     const url = await generateUploadURL('image/jpeg');
-    console.log("GET from s3URL")
+    // console.log("GET from s3URL")
     // res.send('Hello from s3 URL');
     res.json({ ['url']: url });
 });
@@ -103,7 +103,7 @@ app.post('/uploadRestaurant', async (req, res) => {
         query: location,
         limit: 1
     }).send();
-    console.log(geoData.body.features[0].geometry.coordinates);
+    // console.log(geoData.body.features[0].geometry.coordinates);
     // coordinates are stored in the form of longitude, latitude : GeoJSON entity
     newRestaurant.geometry = geoData.body.features[0].geometry;
     try {
@@ -188,9 +188,6 @@ app.get('/cart/:userId', async (req, res) => {
 
 app.post('/add-to-cart', async (req, res) => {
     const { userId, foodItemId, price, name } = req.body;
-    console.log(userId);
-    console.log(foodItemId);
-    console.log()
     try {
         let userCart = await cart.findOne({ user: userId });
         // If cart doesn't exist, create a new one
