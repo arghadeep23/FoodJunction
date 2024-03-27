@@ -1,6 +1,8 @@
 import "../styles/Login.scss";
+import { useNavigate } from "react-router-dom";
 import { forwardRef, useState } from "react";
 const LoginModal = forwardRef(function LoginModal({ hideModal }, ref) {
+    const navigate = useNavigate();
     const [loginData, setLoginData] = useState({ email: "", password: "" });
     function handleChange(e) {
         setLoginData({ ...loginData, [e.target.id]: e.target.value });
@@ -17,7 +19,12 @@ const LoginModal = forwardRef(function LoginModal({ hideModal }, ref) {
             });
             const data = await response.json();
             if (data.success) {
-                alert("Logged in successfully");
+                // alert("Logged in successfully");
+                const token = data.token;
+                const restaurantId = data.restaurantId;
+                localStorage.setItem('token', token);
+                localStorage.setItem('restaurantId', restaurantId);
+                navigate("/ownerDashboard");
                 // hideModal();
             }
             if (!data.success) {

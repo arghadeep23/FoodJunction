@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const promisify = require('util').promisify;
 const randomBytes = promisify(crypto.randomBytes);
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 const connectdb = require("./models/db.js");
 connectdb();
 
@@ -141,7 +142,9 @@ app.post('/restaurantLogin', async (req, res) => {
         const existingRestaurant = await restaurant.findOne({ email });
         if (existingRestaurant) {
             if (bcrypt.compare(existingRestaurant.password, password)) {
-                return res.json({ success: true, restaurantId: existingRestaurant._id });
+                const secretKey = crypto.randomBytes(32).toString('hex');
+                const token = jwt.sign({ userId: existingRestaurant._id }, secretKey, { expiresIn: '1h' });
+                return res.json({ success: true, token: token, restaurantId: existingRestaurant._id });
             }
             else {
                 return res.json({ success: false, message: "Incorrect password" });

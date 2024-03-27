@@ -9,6 +9,7 @@ import Login2 from "./components/Login2.jsx";
 import { CartContext } from "./store/CartContext.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from "./components/Profile.jsx";
+import OwnerDashboard from "./components/OwnerDashboard.jsx";
 import OwnerLanding from "./components/OwnerLanding.jsx";
 import "./App.css";
 import {
@@ -205,6 +206,12 @@ function App() {
       path: "/ownerLanding",
       element: (
         <OwnerLanding />
+      )
+    },
+    {
+      path: "/ownerDashboard",
+      element: (
+        <OwnerDashboard />
       )
     }
   ]);
