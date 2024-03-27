@@ -6,6 +6,7 @@ const cors = require('cors');
 const crypto = require('crypto');
 const promisify = require('util').promisify;
 const randomBytes = promisify(crypto.randomBytes);
+const bcrypt = require("bcrypt");
 const connectdb = require("./models/db.js");
 connectdb();
 
@@ -94,27 +95,67 @@ app.post('/uploads', async (req, res) => {
         res.status(409).json({ message: err.message })
     }
 });
-
-
 app.post('/uploadRestaurant', async (req, res) => {
     const newRestaurant = new restaurant(req.body);
     const location = newRestaurant.location;
-    const geoData = await geocoder.forwardGeocode({
-        query: location,
-        limit: 1
-    }).send();
-    // console.log(geoData.body.features[0].geometry.coordinates);
-    // coordinates are stored in the form of longitude, latitude : GeoJSON entity
-    newRestaurant.geometry = geoData.body.features[0].geometry;
     try {
+        // Forward geocode to get coordinates
+        const geoData = await geocoder.forwardGeocode({
+            query: location,
+            limit: 1
+        }).send();
+        // Store coordinates in GeoJSON format
+        newRestaurant.geometry = geoData.body.features[0].geometry;
+        // Save the new restaurant to the database
         await newRestaurant.save();
-        res.send("Data has been submitted to the database");
+        res.status(201).json({ message: "Data has been submitted to the database" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
-    catch (err) {
-        res.status(409).json({ message: err.message });
+});
+
+app.post('/checkRestaurant', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        // Find a restaurant with the provided email
+        const existingRestaurant = await restaurant.findOne({ email });
+
+        // If a restaurant with the provided email exists, return exists: true
+        if (existingRestaurant) {
+            return res.json({ exists: true });
+        } else {
+            // If no restaurant with the provided email exists, return exists: false
+            return res.json({ exists: false });
+        }
+    } catch (error) {
+        // If an error occurs during the database operation, return a 500 status code
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+app.post('/restaurantLogin', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const existingRestaurant = await restaurant.findOne({ email });
+        if (existingRestaurant) {
+            if (bcrypt.compare(existingRestaurant.password, password)) {
+                return res.json({ success: true, restaurantId: existingRestaurant._id });
+            }
+            else {
+                return res.json({ success: false, message: "Incorrect password" });
+            }
+        }
+        else {
+            return res.json({ success: false, message: "No restaurant found with this email" });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 })
-
 // creating a GET endpoint for fetching food data from MongoDB
 app.get('/foods/:id', async (req, res) => {
     const id = req.params.id;
@@ -146,7 +187,6 @@ app.post('/register', async (req, res) => {
         // Create a new user document
         // const { nickname, picture } = req.body;
         const newUser = new user(req.body);
-
         // Save the new user document to the database
         await newUser.save();
         // Send welcome email

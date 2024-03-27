@@ -4,7 +4,7 @@ import FoodForm from "./components/FoodForm";
 import Navbar from "./components/Navbar";
 import RestaurantForm from "./components/RestaurantForm.jsx";
 import Landing from "./components/Landing.jsx";
-import Login from "./components/Login.jsx";
+import LoginModal from "./components/LoginModal.jsx";
 import Login2 from "./components/Login2.jsx";
 import { CartContext } from "./store/CartContext.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -180,7 +180,7 @@ function App() {
       element: (
         <>
           <Navbar needed={false} />
-          <Login />
+          <LoginModal />
         </>
       ),
     },

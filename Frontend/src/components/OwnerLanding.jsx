@@ -4,7 +4,19 @@ import Customers from "../assets/customers.jpg";
 import Lookout from "../assets/lookout.jpg";
 import Profit from "../assets/profit.jpg";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import LoginModal from './LoginModal.jsx'
+import { useRef } from "react";
 export default function OwnerLanding() {
+
+    const dialog = useRef();
+    const [openModal, setOpenModal] = useState(false);
+    function showModal() {
+        setOpenModal(true);
+    }
+    function hideModal() {
+        setOpenModal(false);
+    }
     const [formData, setFormData] = useState({
         name: "",
         category: "",
@@ -75,12 +87,31 @@ export default function OwnerLanding() {
             [identifier]: event.target.value, // [identifier] is a dynamic key, (javascript syntax)
         }));
     }
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match");
             return;
         }
         event.preventDefault();
+        try {
+            const response = await fetch("http://localhost:3000/checkRestaurant", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: formData.email })
+            });
+            const data = await response.json();
+
+            if (data.exists) {
+                alert("Restaurant with this email already exists");
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Error checking for existing restaurant. Please try again.");
+            return;
+        }
         createRestaurant(formData);
         setFormData({
             name: "",
@@ -94,12 +125,14 @@ export default function OwnerLanding() {
             confirmPassword: ""
         });
         console.log("Form Submitted!");
+        alert("Congratulations! Your restaurant has been successfully registered and added to our database. Please login to get access to your dashboard.");
     }
     return (
         <>
-            <header>
+            {openModal && <LoginModal ref={dialog} hideModal={hideModal} />}
+            <header className="olheader">
                 <div className="logo"><span>FJ for Merchants</span></div>
-                <div className="loginDiv"><span>Login</span></div>
+                <button onClick={showModal} className="loginDiv"><span>Login</span></button>
             </header>
             <main>
                 <div className="mainBox">
@@ -111,27 +144,27 @@ export default function OwnerLanding() {
                             <h3>Unlock more profits, get branding solutions and take your business to the next level.</h3>
                             <form action="" onSubmit={handleSubmit}>
                                 <div className="takeName takeIt">
-                                    <input type="text" placeholder="Restaurant Name" name="name" id="name" value={formData.name} onChange={(event) => handleInputChange('name', event)} />
+                                    <input type="text" placeholder="Restaurant Name" name="name" id="name" value={formData.name} onChange={(event) => handleInputChange('name', event)} required />
                                 </div>
                                 <div className="takeAddress takeIt">
-                                    <input type="text" placeholder="Business Address" name="location" id="location" value={formData.location} onChange={(event) => handleInputChange('location', event)} />
+                                    <input type="text" placeholder="Business Address" name="location" id="location" value={formData.location} onChange={(event) => handleInputChange('location', event)} required />
                                 </div>
                                 <div className="takeEmail takeIt">
-                                    <input type="text" placeholder="Email Address" name="email" id="email" value={formData.email} onChange={(event) => handleInputChange('email', event)} />
+                                    <input type="text" placeholder="Email Address" name="email" id="email" value={formData.email} onChange={(event) => handleInputChange('email', event)} required />
                                 </div>
                                 <div className="takePassword">
-                                    <input type="text" placeholder="Password" name="password" id="email" value={formData.password} onChange={(event) => handleInputChange('password', event)} />
-                                    <input type="text" placeholder="Confirm Password" name="confirmPassword" id="confirmPassword" value={formData.confirmPassword} onChange={(event) => handleInputChange('confirmPassword', event)} />
+                                    <input type="text" placeholder="Password" name="password" id="email" value={formData.password} onChange={(event) => handleInputChange('password', event)} required />
+                                    <input type="text" placeholder="Confirm Password" name="confirmPassword" id="confirmPassword" value={formData.confirmPassword} onChange={(event) => handleInputChange('confirmPassword', event)} required />
                                 </div>
                                 <div className="takeDescription takeIt">
-                                    <textarea placeholder="Short description of your business" id="description" name="description" value={formData.description} onChange={(event) => handleInputChange('description', event)} />
+                                    <textarea placeholder="Short description of your business" id="description" name="description" value={formData.description} onChange={(event) => handleInputChange('description', event)} required />
                                 </div>
                                 <div className="takeCategory takeIt">
-                                    <input type="text" placeholder="Category" value={formData.category} name="category" id="category" onChange={(event) => handleInputChange('category', event)} />
+                                    <input type="text" placeholder="Category" value={formData.category} name="category" id="category" onChange={(event) => handleInputChange('category', event)} required />
                                 </div>
                                 <div className="takeCoverPhoto">
                                     <label htmlFor="coverPhoto">Upload a cover Photo</label>
-                                    <input type="file" id="coverPhoto" name="coverPhoto" onChange={handlePictureChange} />
+                                    <input type="file" id="coverPhoto" name="coverPhoto" onChange={handlePictureChange} required />
                                 </div>
                                 <div className="getStarted">
                                     <button type="submit">Get Started</button>
@@ -176,7 +209,7 @@ export default function OwnerLanding() {
                 </div>
             </main>
             <footer>
-                <div>©️ 2024 FoodJunction : Made with 💟 by Arghadeep Dey</div>
+                <div>©️ 2024 <Link to="/">FoodJunction</Link>: Made with 💟 by Arghadeep Dey</div>
             </footer>
         </>
     )

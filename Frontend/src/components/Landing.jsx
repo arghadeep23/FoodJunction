@@ -180,6 +180,7 @@ export default function Landing() {
                 })}
             </div>
             <Logout />
+            <Link to="/ownerLanding">Are you an owner ? </Link>
         </div>
     );
 }
