@@ -1,37 +1,63 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import OwnerLeftPanel from './OwnerLeftPanel';
+import DashboardOrders from './DashboardOrders';
+import DashboardMenu from './DashboardMenu';
+import DashboardProfile from './DashboardProfile';
+import SubDashboard from './SubDashboard';
+import DashboardSignout from './DashboardSignOut';
+import FoodForm from './FoodForm';
+import '../styles/OwnerDashboard.scss';
 export default function OwnerDashboard() {
-    const [restaurantData, setRestaurantData] = useState({});
+    const [mode, setMode] = useState('dashboard');
+    function handleMode(mode) {
+        setMode(mode);
+    }
+    const [restaurantData, setRestaurantData] = useState();
     const [restaurantId, setRestaurantId] = useState();
     const navigate = useNavigate();
     useEffect(() => {
         const token = localStorage.getItem('token');
         const restaurantId = localStorage.getItem('restaurantId');
-        // fetch(`http://localhost:3000/restaurant/${restaurantId}`, {
-        //     method: "GET",
-        //     headers: {
-        //         "Authorization": `Bearer ${token}`
-        //     }
-        // }).then(response => response.json()).then(data => {
-        //     console.log(data);
-        //     setRestaurantData(data);
-        // }).catch(error => {
-        //     console.log(error);
-        // })
         if (!token) {
             navigate('/ownerLanding');
         }
         else {
             setRestaurantId(restaurantId);
-            console.log(restaurantId);
-            console.log(token);
-            //
+            async function fetchRestaurantDetails() {
+                try {
+                    const restaurantDetails = await fetch(`http://localhost:3000/restaurant/${restaurantId}`).then((response) => response.json());
+                    console.log("restaurantDetails", restaurantDetails);
+                    setRestaurantData(restaurantDetails);
+                }
+                catch (error) {
+                    navigate("/ownerLanding")
+                    console.log(error);
+                }
+            }
+            fetchRestaurantDetails();
         }
 
     }, [])
+    if (!restaurantData) return <h1>Loading...</h1>
     return (
         <>
-            Owner Dashboard {restaurantId ? restaurantId : ''}
+            <div className="dashboard">
+                <div className="leftPanel">
+
+                    <OwnerLeftPanel handleMode={handleMode} mode={mode} />
+                </div>
+                <div className="rightPanel">
+                    {mode === 'dashboard' && <SubDashboard restaurantData={restaurantData} />}
+                    {mode === 'orders' && <DashboardOrders restaurantData={restaurantData} />}
+                    {mode === 'menu' && <DashboardMenu restaurantData={restaurantData} />}
+                    {mode === 'profile' && <DashboardProfile restaurantData={restaurantData} />}
+                    {mode === 'signout' && <DashboardSignout />}
+                    {mode === 'add' && <FoodForm restaurantId={restaurantId} />}
+                </div>
+
+                {/* Owner Dashboard {restaurantId ? restaurantId : ''} */}
+            </div>
         </>
     )
 }

@@ -87,7 +87,7 @@ export default function FoodItems() {
                                         )}
                                     </div>
                                 </div>
-                                <p className="foodDescription">{textReducer(food.description, 145)}</p>
+                                <p className="foodDescription">{textReducer(food.description, 140)}</p>
                             </div>
                         </div>
                     );

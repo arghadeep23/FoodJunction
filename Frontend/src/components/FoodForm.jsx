@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import '../styles/FoodForm.scss';
-export default function FoodForm() {
+export default function FoodForm({ restaurantId }) {
     const [formData, setFormData] = useState({
         name: "",
         price: 0,
         type: "veg",
         description: "",
-        restaurantId: "",
         image: null,
     })
     const createFoodItem = async (foodData) => {
@@ -24,7 +23,7 @@ export default function FoodForm() {
             })
             const imageUrl = url.url.split("?")[0];
             const mongoData = {
-                restaurantId: foodData.restaurantId,
+                restaurantId: restaurantId,
                 name: foodData.name,
                 price: foodData.price,
                 type: foodData.type,
@@ -76,16 +75,12 @@ export default function FoodForm() {
                     <h2>Add Food Item Details</h2>
                     <form action="\form" method="post" onSubmit={handleSubmit}>
                         <div className="take">
-                            <label htmlFor="restaurantId">Enter restaurant Id : </label>
-                            <input type="text" name="restaurantId" placeholder="Restaurant Id" id="restaurantId" value={formData.restaurantId} onChange={(event) => handleInputChange('restaurantId', event)} />
-                        </div>
-                        <div className="take">
                             <label htmlFor="foodName">Enter Food Item Name : </label>
-                            <input type="text" name="name" placeholder="Name" id="foodName" value={formData.name} onChange={(event) => handleInputChange('name', event)} />
+                            <input type="text" name="name" placeholder="Name" id="foodName" value={formData.name} onChange={(event) => handleInputChange('name', event)} required />
                         </div>
                         <div className="take">
                             <label htmlFor="foodPrice">Enter Food Item Price : </label>
-                            <input type="number" name="price" placeholder="Price" id="foodPrice" value={formData.price} onChange={(event) => handleInputChange('price', event)} />
+                            <input type="number" name="price" placeholder="Price" id="foodPrice" value={formData.price} onChange={(event) => handleInputChange('price', event)} required />
                         </div>
                         <div className="take">
                             <label htmlFor="type">Veg/Non-Veg</label>
@@ -100,7 +95,7 @@ export default function FoodForm() {
                         </div>
                         <div className="take">
                             <label htmlFor="foodImage">Upload Food Image : </label>
-                            <input type="file" name="image" id="image" onChange={handlePictureChange} />
+                            <input type="file" name="image" id="image" onChange={handlePictureChange} required />
                         </div>
                         <div className="submit">
                             <button type="submit">Add Food Item</button>

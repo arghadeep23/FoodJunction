@@ -77,7 +77,10 @@
                         width: 50px;
                         height: 20px;
                         border: 1px solid rgba(0, 0, 0, 0.4);
+                        // border: none;
                     }
+
+
 
                     .addRemoveButtons {
                         display: flex;
@@ -91,6 +94,7 @@
                             height: 18px;
                             border: none;
                             border-radius: 8px;
+
                             // border-bottom: 1px solid black;
                         }
 
