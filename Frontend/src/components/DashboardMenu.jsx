@@ -6,22 +6,23 @@ export default function DashboardMenu({ restaurantData }) {
     const [foodItems, setFoodItems] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [selectedFoodItem, setSelectedFoodITem] = useState(null);
+    const fetchFoodItems = async () => {
+        setLoading(true);
+        const foodItems = await fetch(`http://localhost:3000/foods/${restaurantData._id}`).then(response => response.json());
+        setFoodItems(foodItems);
+        console.log(foodItems);
+        setLoading(false);
+    }
     function showModal(food) {
         setSelectedFoodITem(food);
         setOpenModal(true);
     }
     function hideModal() {
         setOpenModal(false);
+        fetchFoodItems();
     }
 
     useEffect(() => {
-        const fetchFoodItems = async () => {
-            setLoading(true);
-            const foodItems = await fetch(`http://localhost:3000/foods/${restaurantData._id}`).then(response => response.json());
-            setFoodItems(foodItems);
-            console.log(foodItems);
-            setLoading(false);
-        }
         if (foodItems) return;
         fetchFoodItems();
     }, [])

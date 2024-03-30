@@ -1,0 +1,106 @@
+.formStyle {
+    font-family: "Inter", sans-seriff;
+
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        .take {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 100px;
+
+            label {
+                width: 150px;
+            }
+
+            input,
+            textarea {
+                padding: 5px;
+                font-family: "Inter", sans-seriff;
+                font-weight: 400;
+                font-size: 16px;
+            }
+
+            input {
+                width: auto;
+                height: 30px;
+            }
+
+            textarea {
+                width: 500px;
+                height: 100px;
+
+            }
+
+            input:hover,
+            textarea:hover {
+                border: 1px solid #FF4500;
+            }
+        }
+
+        .imagePreview {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+
+            .showImage {
+                img {
+                    width: 300px;
+                    height: 200px;
+                    object-fit: fill;
+                }
+            }
+
+            .takeImage {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                justify-content: center;
+
+                input {
+                    width: 300px;
+                    height: 30px;
+                    padding: 5px;
+                    font-family: "Inter", sans-seriff;
+                    font-weight: 400;
+                    font-size: 16px;
+                }
+            }
+
+
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            width: max-content;
+            height: 30px;
+            // background-color: #FF4500;
+            color: black;
+            // border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: "Inter", sans-seriff;
+            font-weight: 400;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        // button:hover {
+        //     background-color: #DE432E;
+        // }
+    }
+}

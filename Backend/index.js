@@ -33,6 +33,7 @@ const REGION = process.env.REGION
 const BUCKET_NAME = process.env.BUCKET_NAME
 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const { error } = require('console');
 const mapboxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapboxToken });  // has 2 methods : forward and reverse geocode
 
@@ -96,7 +97,18 @@ app.post('/uploads', async (req, res) => {
         res.status(409).json({ message: err.message })
     }
 });
+
+app.put('/foods/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const updatedFood = await food.findByIdAndUpdate(id, req.body, { new: true });
+        res.json(updatedFood);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 app.post('/uploadRestaurant', async (req, res) => {
+    // console.log(req.body);
     const newRestaurant = new restaurant(req.body);
     const location = newRestaurant.location;
     try {
@@ -114,10 +126,17 @@ app.post('/uploadRestaurant', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
-
+app.put('/restaurants/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const updatedRestaurant = await restaurant.findByIdAndUpdate(id, req.body, { new: true });
+        res.json(updatedRestaurant);
+    } catch (err) {
+        res.status(500).json({ messgae: error.message });
+    }
+})
 app.post('/checkRestaurant', async (req, res) => {
     const { email } = req.body;
-
     try {
         // Find a restaurant with the provided email
         const existingRestaurant = await restaurant.findOne({ email });

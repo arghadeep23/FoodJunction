@@ -16,6 +16,17 @@ export default function OwnerDashboard() {
     const [restaurantData, setRestaurantData] = useState();
     const [restaurantId, setRestaurantId] = useState();
     const navigate = useNavigate();
+    async function fetchRestaurantDetails(restaurantId) {
+        try {
+            const restaurantDetails = await fetch(`http://localhost:3000/restaurant/${restaurantId}`).then((response) => response.json());
+            console.log("restaurantDetails", restaurantDetails);
+            setRestaurantData(restaurantDetails);
+        }
+        catch (error) {
+            navigate("/ownerLanding")
+            console.log(error);
+        }
+    }
     useEffect(() => {
         const token = localStorage.getItem('token');
         const restaurantId = localStorage.getItem('restaurantId');
@@ -24,21 +35,13 @@ export default function OwnerDashboard() {
         }
         else {
             setRestaurantId(restaurantId);
-            async function fetchRestaurantDetails() {
-                try {
-                    const restaurantDetails = await fetch(`http://localhost:3000/restaurant/${restaurantId}`).then((response) => response.json());
-                    console.log("restaurantDetails", restaurantDetails);
-                    setRestaurantData(restaurantDetails);
-                }
-                catch (error) {
-                    navigate("/ownerLanding")
-                    console.log(error);
-                }
-            }
-            fetchRestaurantDetails();
+            fetchRestaurantDetails(restaurantId);
         }
-
     }, [])
+    function handleDetailsEdit() {
+        fetchRestaurantDetails(restaurantId);
+        setMode('profile');
+    }
     if (!restaurantData) return <h1>Loading...</h1>
     return (
         <>
@@ -51,7 +54,7 @@ export default function OwnerDashboard() {
                     {mode === 'dashboard' && <SubDashboard restaurantData={restaurantData} />}
                     {mode === 'orders' && <DashboardOrders restaurantData={restaurantData} />}
                     {mode === 'menu' && <DashboardMenu restaurantData={restaurantData} />}
-                    {mode === 'profile' && <DashboardProfile restaurantData={restaurantData} />}
+                    {mode === 'profile' && <DashboardProfile restaurantData={restaurantData} handleDetailsEdit={handleDetailsEdit} />}
                     {mode === 'signout' && <DashboardSignout />}
                     {mode === 'add' && <FoodForm restaurantId={restaurantId} />}
                 </div>

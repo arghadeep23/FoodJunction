@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
-import '../styles/FoodForm.scss';
+// uses same style used in DashboardProfile.jsx
+import SamplePhoto from "../assets/samplePhoto.jpg";
 export default function FoodForm({ restaurantId }) {
     const [formData, setFormData] = useState({
         name: "",
@@ -9,6 +10,7 @@ export default function FoodForm({ restaurantId }) {
         description: "",
         image: null,
     })
+    const [image, setImage] = useState(null);
     const createFoodItem = async (foodData) => {
         try {
             // GET request to backend to fetch the presigned URL to put the image in S3
@@ -44,6 +46,7 @@ export default function FoodForm({ restaurantId }) {
         }
     }
     const handlePictureChange = async (event) => {
+        setImage(event.target.files[0]);
         setFormData((prevFormData) => ({
             ...prevFormData,
             ['image']: event.target.files[0]
@@ -70,38 +73,45 @@ export default function FoodForm({ restaurantId }) {
     }
     return (
         <>
-            <div className="main" >
-                <div className="centerDiv">
+            <div className="formStyle" >
+                <div className="header">
                     <h2>Add Food Item Details</h2>
-                    <form action="\form" method="post" onSubmit={handleSubmit}>
-                        <div className="take">
-                            <label htmlFor="foodName">Enter Food Item Name : </label>
-                            <input type="text" name="name" placeholder="Name" id="foodName" value={formData.name} onChange={(event) => handleInputChange('name', event)} required />
+                </div>
+                <form action="\form" method="post" onSubmit={handleSubmit}>
+                    <div className="take">
+                        <label htmlFor="foodName">Enter Food Item Name : </label>
+                        <input type="text" name="name" placeholder="Name" id="foodName" value={formData.name} onChange={(event) => handleInputChange('name', event)} required />
+                    </div>
+                    <div className="take">
+                        <label htmlFor="foodPrice">Enter Food Item Price : </label>
+                        <input type="number" name="price" placeholder="Price" id="foodPrice" value={formData.price} onChange={(event) => handleInputChange('price', event)} required />
+                    </div>
+                    <div className="take">
+                        <label htmlFor="type">Veg/Non-Veg</label>
+                        <select name="type" id="type" onChange={(event) => handleInputChange('type', event)} value={formData.type}>
+                            <option value="veg">Veg</option>
+                            <option value="non-veg">Non-Veg</option>
+                        </select>
+                    </div>
+                    <div className="take">
+                        <label htmlFor="foodDescription">Enter Food Item Description : </label>
+                        <textarea name="description" id="foodDescription" cols="10" rows="5" value={formData.description} onChange={(event) => handleInputChange('description', event)}></textarea>
+                    </div>
+                    <div className="imagePreview">
+                        <div className="showImage">
+                            <img src={image ? URL.createObjectURL(image) : SamplePhoto} alt="" />
                         </div>
-                        <div className="take">
-                            <label htmlFor="foodPrice">Enter Food Item Price : </label>
-                            <input type="number" name="price" placeholder="Price" id="foodPrice" value={formData.price} onChange={(event) => handleInputChange('price', event)} required />
-                        </div>
-                        <div className="take">
-                            <label htmlFor="type">Veg/Non-Veg</label>
-                            <select name="type" id="type" onChange={(event) => handleInputChange('type', event)} value={formData.type}>
-                                <option value="veg">Veg</option>
-                                <option value="non-veg">Non-Veg</option>
-                            </select>
-                        </div>
-                        <div className="description">
-                            <label htmlFor="foodDescription">Enter Food Item Description : </label>
-                            <textarea name="description" id="foodDescription" cols="10" rows="5" value={formData.description} onChange={(event) => handleInputChange('description', event)}></textarea>
-                        </div>
-                        <div className="take">
+                        <div className="takeImage">
                             <label htmlFor="foodImage">Upload Food Image : </label>
                             <input type="file" name="image" id="image" onChange={handlePictureChange} required />
                         </div>
-                        <div className="submit">
-                            <button type="submit">Add Food Item</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div className="buttons">
+                        <button type="submit">Add Food Item</button>
+                    </div>
+                </form>
+
             </div>
         </>)
 };

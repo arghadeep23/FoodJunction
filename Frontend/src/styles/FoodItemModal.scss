@@ -7,7 +7,7 @@
     border: 1px solid #ccc;
     padding: 20px;
     z-index: 1000; // Ensure the modal is above other content
-    height: 400px;
+    height: auto;
     font-family: 'Inter', sans-seriff;
     display: flex;
     flex-direction: column;
@@ -19,14 +19,34 @@
     form {
         width: 100%;
 
+        .showImg {
+            img {
+                width: 100%;
+                object-fit: fill;
+                height: 300px;
+            }
+
+            margin-bottom : 10px;
+        }
+
         .take {
             margin-bottom: 10px;
+
+            input,
+            textarea {
+                padding: 5px;
+                font-family: "Inter", sans-seriff;
+            }
 
             input {
                 width: 100%;
                 height: 30px;
-                padding: 5px;
-                font-family: "Inter", sans-seriff;
+            }
+
+            textarea {
+                width: 100%;
+                height: 100px;
+
             }
         }
     }
