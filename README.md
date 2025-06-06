@@ -1,4 +1,4 @@
-# Welcome to $\color{Apricot}{FoodJunction}$ 🍕
+# Welcome to $FoodJunction$ 🍕
 
 FoodJunction is a web application, made using the MERN stack, and some third party APIs like Auth0 , Mapbox, Stripe.
 
