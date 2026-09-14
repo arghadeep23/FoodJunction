@@ -1,7 +1,8 @@
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import "../styles/Navbar.scss";
+import PropTypes from "prop-types";
 import { CartContext } from "../store/CartContext.jsx";
-import { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState } from "react";
 import DropDownMenu from './DropDownMenu.jsx';
 import { Link } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -54,3 +55,7 @@ export default function Navbar({ needed }) {
         </>
     )
 }
+
+Navbar.propTypes = {
+    needed: PropTypes.bool,
+};

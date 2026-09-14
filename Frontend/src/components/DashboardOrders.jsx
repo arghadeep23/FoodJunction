@@ -1,5 +1,5 @@
 import "../styles/DashboardOrders.scss";
-export default function DashboardOrders({ restaurantData }) {
+export default function DashboardOrders() {
 
     return (
         <>

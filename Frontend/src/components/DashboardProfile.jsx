@@ -1,4 +1,5 @@
 import "../styles/DashboardProfile.scss";
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { API_BASE_URL } from "../config.js";
 export default function DashboardProfile({ restaurantData, handleDetailsEdit }) {
@@ -82,6 +83,7 @@ export default function DashboardProfile({ restaurantData, handleDetailsEdit }) 
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header for JSON data
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(mongoData),
         }).then(response => response.json()).catch(error => {
@@ -148,3 +150,11 @@ export default function DashboardProfile({ restaurantData, handleDetailsEdit }) 
         </>
     )
 }
+
+DashboardProfile.propTypes = {
+    restaurantData: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+    }),
+    handleDetailsEdit: PropTypes.func,
+};

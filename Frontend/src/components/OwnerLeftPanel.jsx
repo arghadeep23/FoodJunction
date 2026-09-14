@@ -1,4 +1,5 @@
 import "../styles/OwnerLeftPanel.scss";
+import PropTypes from 'prop-types';
 import HomeIcon from '@mui/icons-material/Home';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
@@ -33,3 +34,8 @@ export default function OwnerLeftPanel({ handleMode, mode }) {
         </>
     )
 }
+
+OwnerLeftPanel.propTypes = {
+    handleMode: PropTypes.func,
+    mode: PropTypes.string,
+};

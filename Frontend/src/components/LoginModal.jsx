@@ -1,4 +1,5 @@
 import "../styles/Login.scss";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { forwardRef, useState } from "react";
 import { API_BASE_URL } from "../config.js";
@@ -67,4 +68,7 @@ const LoginModal = forwardRef(function LoginModal({ hideModal }, ref) {
         </dialog>
     );
 });
+LoginModal.propTypes = {
+    hideModal: PropTypes.func,
+};
 export default LoginModal;

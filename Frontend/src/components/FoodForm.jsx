@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 // uses same style used in DashboardProfile.jsx
 import SamplePhoto from "../assets/samplePhoto.jpg";
 import { API_BASE_URL } from "../config.js";
@@ -37,7 +37,8 @@ export default function FoodForm({ restaurantId }) {
             await fetch(`${API_BASE_URL}/uploads`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify(mongoData),
             })
@@ -115,4 +116,8 @@ export default function FoodForm({ restaurantId }) {
 
             </div>
         </>)
+}
+
+FoodForm.propTypes = {
+    restaurantId: PropTypes.string,
 };

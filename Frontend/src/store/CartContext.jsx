@@ -3,8 +3,8 @@ export const CartContext = createContext(
     {
         userId: null,
         items: [],
-        addItemToCart: (item) => { },
-        removeItemFromCart: (item) => { },
+        addItemToCart: () => { },
+        removeItemFromCart: () => { },
         overallQuantity: 0,
         ordersMap: new Map()
     }

@@ -1,4 +1,5 @@
 import "../styles/FoodItemModal.scss";
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { API_BASE_URL } from "../config.js";
 export default function FoodItemModal({ hideModal, food }) {
@@ -42,6 +43,7 @@ export default function FoodItemModal({ hideModal, food }) {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header for JSON data
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(mongoData),
         }).then(response => response.json()).then(data => {
@@ -91,3 +93,15 @@ export default function FoodItemModal({ hideModal, food }) {
         </>
     )
 }
+
+FoodItemModal.propTypes = {
+    hideModal: PropTypes.func,
+    food: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        type: PropTypes.string,
+        description: PropTypes.string,
+        imageURL: PropTypes.string,
+    }),
+};

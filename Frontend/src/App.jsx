@@ -16,11 +16,7 @@ import "./App.css";
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Outlet,
-  Navigate,
 } from "react-router-dom";
-import MyMap from "./components/MyMap.jsx";
 
 function App() {
 
@@ -36,7 +32,7 @@ function App() {
   useEffect(() => {
     if (isAuthenticated && user) {
       // check if user exists in the database
-      async function registerUser() {
+      const registerUser = async () => {
         const response = await fetch(`${API_BASE_URL}/register`, {
           method: "POST",
           headers: {
@@ -48,7 +44,7 @@ function App() {
         setUserId(data);
         // store the user id in local storage
         localStorage.setItem("userId", data);
-      }
+      };
       registerUser();
     }
   }, [isAuthenticated, user])

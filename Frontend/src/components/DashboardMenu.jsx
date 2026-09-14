@@ -1,4 +1,5 @@
 import "../styles/DashboardMenu.scss";
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react'
 import FoodItemModal from './FoodItemModal.jsx';
 import { API_BASE_URL } from "../config.js";
@@ -26,6 +27,8 @@ export default function DashboardMenu({ restaurantData }) {
     useEffect(() => {
         if (foodItems) return;
         fetchFoodItems();
+        // Intentionally run once on mount only, to load the menu for this restaurant.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     function textReducer(text, limit) {
         if (text.length > limit) {
@@ -67,3 +70,10 @@ export default function DashboardMenu({ restaurantData }) {
         </>
     )
 }
+
+DashboardMenu.propTypes = {
+    restaurantData: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+    }),
+};

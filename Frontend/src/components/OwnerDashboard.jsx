@@ -38,6 +38,8 @@ export default function OwnerDashboard() {
             setRestaurantId(restaurantId);
             fetchRestaurantDetails(restaurantId);
         }
+        // Intentionally run once on mount only, to check the stored auth token.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     function handleDetailsEdit() {
         fetchRestaurantDetails(restaurantId);

@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { CartContext } from "../store/CartContext.jsx";
 import { useParams } from "react-router-dom";
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import "../styles/FoodItems.scss";
 import MyMap from "./MyMap.jsx";
 import { API_BASE_URL } from "../config.js";
@@ -27,7 +26,7 @@ export default function FoodItems() {
             }
         }
         fetchFood();
-    }, []);
+    }, [restaurantId]);
     function textReducer(text, limit) {
         if (text.length > limit) {
             return text.substring(0, limit - 3) + " ...";
