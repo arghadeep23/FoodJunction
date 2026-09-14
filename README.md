@@ -1,57 +1,154 @@
-# Welcome to FoodJunction 🍕
+# FoodJunction 🍕
 
-FoodJunction is a web application, made using the MERN stack, and some third party APIs like Auth0 , Mapbox, Stripe.
+[![CI](https://github.com/arghadeep23/FoodJunction/actions/workflows/ci.yml/badge.svg)](https://github.com/arghadeep23/FoodJunction/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
 
-FoodJunction helps users to browse through restuarants and order food items. A cart functionality is implemented 
-which allows users to add their favorite food items to their cart. Users can they pay using their favorite cards through the Stripe payment gateway which is integrated. 
+A full-stack MERN food ordering app: customers browse restaurants, build a cart, and check out, while restaurant owners get a separate merchant dashboard (**FoodJunction for Merchants**) to manage their menu, profile, and cover photo.
 
-FoodJunction has a subsidiary named `FoodJunction for Merchants` which allows restaurant owners/merchants to create a new account by registering. A smart dashboard is provided to them
-to manage customer orders, update their menu items and edit their profile information. 
+**Live demo:** _coming soon_
 
-*** 
-## Here are some screenshots 📸
-### Homepage
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/9173ba86-ba62-4191-957c-1b02fdf4999d)
+## Screenshots
 
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/c60492ae-d491-4544-a035-b63493f16f82)
+<table>
+<tr>
+<td><img src="https://github.com/arghadeep23/FoodJunction/assets/91934528/9173ba86-ba62-4191-957c-1b02fdf4999d" alt="Homepage" /></td>
+<td><img src="https://github.com/arghadeep23/FoodJunction/assets/91934528/c60492ae-d491-4544-a035-b63493f16f82" alt="Restaurant menu" /></td>
+</tr>
+<tr>
+<td><img src="https://github.com/arghadeep23/FoodJunction/assets/91934528/e6d7706b-cf5c-4b74-a974-f059ff010565" alt="FoodJunction for Merchants" /></td>
+<td><img src="https://github.com/arghadeep23/FoodJunction/assets/91934528/8046e807-24c9-4205-9941-cf46ccee76ae" alt="Merchant dashboard" /></td>
+</tr>
+<tr>
+<td><img src="https://github.com/arghadeep23/FoodJunction/assets/91934528/128ff95a-252b-42cb-82ab-5624a64b15b6" alt="Editing a food item" /></td>
+<td><img src="https://github.com/arghadeep23/FoodJunction/assets/91934528/b12afc8d-1eaf-42d4-8f3d-7e9b158f7ff3" alt="Adding a new food item" /></td>
+</tr>
+</table>
 
-### FoodJunction for Merchants
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/e6d7706b-cf5c-4b74-a974-f059ff010565)
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/8046e807-24c9-4205-9941-cf46ccee76ae)
+## Features
 
-### Editing option for food items 
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/128ff95a-252b-42cb-82ab-5624a64b15b6)
+**Customer-facing**
+- Browse restaurants and their menus, with category browsing on the landing page
+- Sign in via Auth0 (Google / email)
+- Per-restaurant cart with quantity controls, persisted server-side per user
+- Restaurant location shown on an interactive map (Leaflet + OpenStreetMap)
 
-### Adding a new food item 
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/b12afc8d-1eaf-42d4-8f3d-7e9b158f7ff3)
+**FoodJunction for Merchants**
+- Restaurant registration with address geocoding (Mapbox) so listings appear correctly on the map
+- Email/password login issuing a JWT, used to authorize all subsequent dashboard actions
+- Add/edit menu items, each with an image uploaded directly to S3 via a pre-signed URL
+- Edit restaurant profile (description, category, location, cover photo)
 
-### Editing option for Profile details 
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/1040bdc8-c725-4b60-90d3-d99f3b07117a)
+## Tech stack
 
-### Payment Gateway 
-![image](https://github.com/arghadeep23/FoodJunction/assets/91934528/f77149af-be37-4de5-979f-c9bb5f41c5f7)
+| | |
+|---|---|
+| **Frontend** | React 18, Vite, React Router, Auth0, Leaflet, Material UI icons, SCSS |
+| **Backend** | Node.js, Express, Mongoose (MongoDB Atlas) |
+| **Auth** | Auth0 (customers), JWT + bcrypt (restaurant owners) |
+| **Storage/APIs** | AWS S3 (image uploads via pre-signed URLs), Mapbox (geocoding) |
+| **CI** | GitHub Actions (lint + build on every push/PR) |
 
-***
+## Architecture
 
-## Tech Stacks Used 🧑‍💻
-1. Frontend
-   - React
-   - HTML
-   - CSS / SASS
-   - Material UI Icons
-   - React Router DOM
-   - React Leaflet
-  
-2. Backend
-   - NodeJS
-   - ExpressJS
-   - MongoDB
-   - AWS S3
-   - Mapbox API
-   - Auth0
-   - Sendgrid
+The backend follows an MVC-style layout:
 
-## Future Work 🔮
-  - Preventing users from ordering from different restaurants (cart won't allow food items from different restaurants)
-  - Making the order dashboard for merchants so that they can see who ordered what items
-  - Allowing users to filter out food items based on food category (currently that feature is not there) 
+```
+Backend/
+├── models/       Mongoose schemas + the MongoDB connection
+├── controllers/  Request handlers, one file per resource
+├── routes/       Express routers, one per resource, mounted in index.js
+├── middleware/   requireRestaurantAuth — verifies the owner JWT on protected routes
+├── config/       Third-party client setup (AWS S3, Mapbox)
+└── index.js      App/middleware wiring only — no business logic
+```
+
+Restaurant-owner routes that mutate data (`PUT /restaurants/:id`, `POST /uploads`, `PUT /foods/:id`) require a valid `Authorization: Bearer <token>` header, checked by `middleware/auth.js`. The token is issued by `POST /restaurantLogin` after verifying the bcrypt-hashed password, and the frontend stores it in `localStorage` and attaches it to those requests.
+
+```
+Frontend/
+└── src/
+    ├── components/  One component per page/feature
+    ├── store/       CartContext (React context for the shopping cart)
+    └── config.js    API_BASE_URL, read from VITE_API_BASE_URL
+```
+
+See [CLAUDE.md](CLAUDE.md) for a more detailed technical reference (env vars, known limitations, things to watch when modifying).
+
+## Getting started
+
+### Prerequisites
+- Node.js 20+
+- A MongoDB Atlas cluster
+- AWS S3 bucket + credentials
+- A Mapbox access token
+- An Auth0 application (SPA)
+
+### Backend
+
+```bash
+cd Backend
+npm install
+cp .env.example .env   # fill in real values, see table below
+npm run dev             # nodemon, or `npm start` for a plain run
+```
+
+Runs on `http://localhost:3000`.
+
+| Variable | Used for |
+|---|---|
+| `MONGODB_PASSWORD` | MongoDB Atlas password |
+| `ACCESS_KEYID` / `SECRET_ACCESS_KEY` / `REGION` / `BUCKET_NAME` | AWS S3, for pre-signed image upload URLs |
+| `MAPBOX_TOKEN` | Forward geocoding restaurant addresses on registration |
+| `JWT_SECRET` | Signs/verifies restaurant-owner JWTs — generate with `openssl rand -hex 32` |
+
+### Frontend
+
+```bash
+cd Frontend
+npm install
+cp .env.example .env   # defaults to http://localhost:3000, change if needed
+npm run dev
+```
+
+Runs on `http://localhost:5173`.
+
+| Variable | Used for |
+|---|---|
+| `VITE_API_BASE_URL` | Base URL the frontend calls the backend API at |
+
+Auth0 `domain`/`clientId` are currently hardcoded in `Frontend/src/main.jsx` rather than env-driven — see `CLAUDE.md` if you're pointing this at your own Auth0 tenant.
+
+## API overview
+
+| Method | Route | Auth | Purpose |
+|---|---|---|---|
+| POST | `/register` | — | Register/fetch a customer (Auth0-authenticated user) |
+| GET | `/restaurants` | — | List all restaurants |
+| GET | `/restaurant/:id` | — | Get one restaurant |
+| POST | `/uploadRestaurant` | — | Register a new restaurant (geocodes the address) |
+| POST | `/checkRestaurant` | — | Check if a restaurant email is already registered |
+| POST | `/restaurantLogin` | — | Restaurant owner login, returns a JWT |
+| PUT | `/restaurants/:id` | 🔒 owner | Update restaurant profile |
+| GET | `/foods/:id` | — | List food items for a restaurant |
+| POST | `/uploads` | 🔒 owner | Create a food item |
+| PUT | `/foods/:id` | 🔒 owner | Update a food item |
+| GET | `/s3URL` | — | Get a pre-signed S3 upload URL |
+| GET | `/cart/:userId` | — | Get a customer's cart |
+| POST | `/add-to-cart` | — | Add/increment an item in the cart |
+| DELETE | `/remove-from-cart` | — | Remove/decrement an item in the cart |
+
+## Roadmap / known limitations
+
+- Payment integration (Stripe) is listed as a dependency but not yet wired up end-to-end
+- JWT auth middleware checks the token is valid but doesn't yet verify it belongs to the restaurant being mutated
+- No automated tests yet (CI currently runs lint + build only)
+- Order dashboard for merchants (seeing who ordered what) is not implemented
+- Filtering food items by category is not implemented
+- Cart doesn't yet prevent mixing items from different restaurants
+
+## License
+
+[MIT](LICENSE)

@@ -21,9 +21,10 @@ Backend:
 ```
 cd Backend
 npm install
-npm run start   # not defined yet — currently: node index.js
+npm run dev      # nodemon index.js
+# or: npm start  # node index.js
 ```
-There is no `start`/`dev` script in `Backend/package.json` yet (only a placeholder `test` script). Run the server directly with `node index.js`. It listens on port **3000** (hardcoded in `index.js`, not configurable via env).
+Listens on port **3000** (hardcoded in `index.js`, not configurable via env).
 
 Frontend:
 ```
@@ -74,7 +75,10 @@ These three routes are protected server-side by `middleware/auth.js`'s `requireR
 
 Two bugs were fixed here (previously: `bcrypt.compare(existingRestaurant.password, password)` called with arguments swapped and without `await`, which made the return value an always-truthy Promise — any password, including a wrong one, would log a user in; and the JWT was signed with a freshly random secret discarded immediately after, so no token could ever have been verified even if middleware had existed).
 
-## Notes / things to watch when modifying
+## Docs, lint, CI, license
 
-- Backend has no `nodemon` — restart manually after edits, or add it as a dev convenience.
-- Node version installed locally: v25.0.0.
+- Root `README.md` is the resume/portfolio-facing overview (features, tech stack, architecture summary, setup, API table, roadmap). `CLAUDE.md` (this file) is the deeper technical reference — keep both in sync when structure or env vars change. `Frontend/README.md` (the stale default Vite template with inaccurate setup notes) was deleted since it duplicated and contradicted the root README.
+- Both `Frontend` and `Backend` have ESLint (`npm run lint` in each), both currently pass with zero warnings (`--max-warnings 0`). `Backend/.eslintrc.cjs` mirrors `Frontend/.eslintrc.cjs`'s style but without the React-specific plugins.
+- `.github/workflows/ci.yml` runs on every push/PR to `main`: a `frontend` job (`npm ci`, lint, build) and a `backend` job (`npm ci`, lint). Both `package-lock.json` files are committed (previously gitignored, which would have broken `npm ci`) — keep them committed going forward.
+- `LICENSE` is MIT (added; `package.json` previously said `ISC`, an unedited npm-init default, updated in `Backend/package.json` to match — `Frontend/package.json` has `"private": true` and no license field).
+- Node version installed locally: v25.0.0. CI uses Node 20 (LTS).
