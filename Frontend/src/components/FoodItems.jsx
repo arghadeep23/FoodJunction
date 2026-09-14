@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
 import "../styles/FoodItems.scss";
 import MyMap from "./MyMap.jsx";
+import { API_BASE_URL } from "../config.js";
 export default function FoodItems() {
     // var map = L.map('map').setView([51.505, -0.09], 13); 
     const [foodItems, setFoodItems] = useState([]);
@@ -15,10 +16,10 @@ export default function FoodItems() {
         if (!restaurantId) return;
         async function fetchFood() {
             try {
-                const foods = await fetch(`http://localhost:3000/foods/${restaurantId}`).then(
+                const foods = await fetch(`${API_BASE_URL}/foods/${restaurantId}`).then(
                     (response) => response.json()
                 );
-                const restaurant = await fetch(`http://localhost:3000/restaurant/${restaurantId}`).then((response) => response.json());
+                const restaurant = await fetch(`${API_BASE_URL}/restaurant/${restaurantId}`).then((response) => response.json());
                 setRestaurantDetails(restaurant);
                 setFoodItems(foods);
             } catch (error) {

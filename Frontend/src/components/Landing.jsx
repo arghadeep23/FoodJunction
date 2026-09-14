@@ -1,4 +1,5 @@
 import "../styles/Landing.scss";
+import { API_BASE_URL } from "../config.js";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Carousel from "react-multi-carousel";
@@ -33,7 +34,7 @@ export default function Landing() {
         async function fetchRestaurants() {
             try {
                 const restaurant = await fetch(
-                    "http://localhost:3000/restaurants"
+                    `${API_BASE_URL}/restaurants`
                 ).then((response) => response.json());
                 // console.log(foods);
                 setRestaurants(restaurant);

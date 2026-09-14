@@ -4,6 +4,7 @@ import Customers from "../assets/customers.jpg";
 import Lookout from "../assets/lookout.jpg";
 import Profit from "../assets/profit.jpg";
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../config.js";
 import { Link } from "react-router-dom";
 import LoginModal from './LoginModal.jsx'
 import { useRef } from "react";
@@ -42,7 +43,7 @@ export default function OwnerLanding() {
     const createRestaurant = async (restaurant) => {
         try {
             // GET request to backend to fetch the presigned URL to put the image in S3
-            const url = await fetch("http://localhost:3000/s3URL").then(response => response.json());
+            const url = await fetch(`${API_BASE_URL}/s3URL`).then(response => response.json());
             // PUT request to s3 to upload the image 
             await fetch(url.url, {
                 method: "PUT",
@@ -63,7 +64,7 @@ export default function OwnerLanding() {
                 password: restaurant.password
             }
             // POST request to backend to submit the data to MongoDB
-            await fetch("http://localhost:3000/uploadRestaurant", {
+            await fetch(`${API_BASE_URL}/uploadRestaurant`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -94,7 +95,7 @@ export default function OwnerLanding() {
         }
         event.preventDefault();
         try {
-            const response = await fetch("http://localhost:3000/checkRestaurant", {
+            const response = await fetch(`${API_BASE_URL}/checkRestaurant`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

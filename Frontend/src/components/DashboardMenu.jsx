@@ -1,6 +1,7 @@
 import "../styles/DashboardMenu.scss";
 import { useState, useEffect } from 'react'
 import FoodItemModal from './FoodItemModal.jsx';
+import { API_BASE_URL } from "../config.js";
 export default function DashboardMenu({ restaurantData }) {
     const [loading, setLoading] = useState(false);
     const [foodItems, setFoodItems] = useState(null);
@@ -8,7 +9,7 @@ export default function DashboardMenu({ restaurantData }) {
     const [selectedFoodItem, setSelectedFoodITem] = useState(null);
     const fetchFoodItems = async () => {
         setLoading(true);
-        const foodItems = await fetch(`http://localhost:3000/foods/${restaurantData._id}`).then(response => response.json());
+        const foodItems = await fetch(`${API_BASE_URL}/foods/${restaurantData._id}`).then(response => response.json());
         setFoodItems(foodItems);
         console.log(foodItems);
         setLoading(false);

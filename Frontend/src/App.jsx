@@ -8,6 +8,7 @@ import LoginModal from "./components/LoginModal.jsx";
 import Login2 from "./components/Login2.jsx";
 import { CartContext } from "./store/CartContext.jsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { API_BASE_URL } from "./config.js";
 import Profile from "./components/Profile.jsx";
 import OwnerDashboard from "./components/OwnerDashboard.jsx";
 import OwnerLanding from "./components/OwnerLanding.jsx";
@@ -36,7 +37,7 @@ function App() {
     if (isAuthenticated && user) {
       // check if user exists in the database
       async function registerUser() {
-        const response = await fetch("http://localhost:3000/register", {
+        const response = await fetch(`${API_BASE_URL}/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -58,7 +59,7 @@ function App() {
     if (!userId) return;
     async function fetchCart() {
       try {
-        const cart = await fetch(`http://localhost:3000/cart/${userId}`).then((response) => response.json());
+        const cart = await fetch(`${API_BASE_URL}/cart/${userId}`).then((response) => response.json());
         setShoppingCart(cart);
         setOverallQuantity(cart.reduce((acc, item) => acc + item.quantity, 0));
         setOrdersMap(new Map(cart.map((item) => [item.foodItemId, item.quantity])));
@@ -88,7 +89,7 @@ function App() {
       return newMap;
     });
     setShoppingCart(updatedCart);
-    await fetch("http://localhost:3000/add-to-cart", {
+    await fetch(`${API_BASE_URL}/add-to-cart`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -120,7 +121,7 @@ function App() {
       return;
     }
     setShoppingCart(updatedCart);
-    await fetch("http://localhost:3000/remove-from-cart", {
+    await fetch(`${API_BASE_URL}/remove-from-cart`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"

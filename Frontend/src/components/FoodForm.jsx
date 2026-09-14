@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 // uses same style used in DashboardProfile.jsx
 import SamplePhoto from "../assets/samplePhoto.jpg";
+import { API_BASE_URL } from "../config.js";
 export default function FoodForm({ restaurantId }) {
     const [formData, setFormData] = useState({
         name: "",
@@ -14,7 +15,7 @@ export default function FoodForm({ restaurantId }) {
     const createFoodItem = async (foodData) => {
         try {
             // GET request to backend to fetch the presigned URL to put the image in S3
-            const url = await fetch("http://localhost:3000/s3URL").then(response => response.json());
+            const url = await fetch(`${API_BASE_URL}/s3URL`).then(response => response.json());
             // PUT request to S3 to upload the image
             await fetch(url.url, {
                 method: "PUT",
@@ -33,7 +34,7 @@ export default function FoodForm({ restaurantId }) {
                 imageURL: imageUrl,
             }
             // POST request to backend to submit the data to MongoDB
-            await fetch("http://localhost:3000/uploads", {
+            await fetch(`${API_BASE_URL}/uploads`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

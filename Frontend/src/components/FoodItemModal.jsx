@@ -1,5 +1,6 @@
 import "../styles/FoodItemModal.scss";
 import { useState } from 'react';
+import { API_BASE_URL } from "../config.js";
 export default function FoodItemModal({ hideModal, food }) {
     const [formData, setFormData] = useState(food);
     // const [editedFormData, setEditedFormData] = useState();
@@ -25,7 +26,7 @@ export default function FoodItemModal({ hideModal, food }) {
         }
         if (editPicture) {
             // fetching the presigned URL from the backend
-            const url = await fetch("http://localhost:3000/s3URL").then(response => response.json());
+            const url = await fetch(`${API_BASE_URL}/s3URL`).then(response => response.json());
             // PUT request to S3 to upload the image
             await fetch(url.url, {
                 method: "PUT",
@@ -37,7 +38,7 @@ export default function FoodItemModal({ hideModal, food }) {
             const imageUrl = url.url.split("?")[0];
             mongoData.imageURL = imageUrl;
         }
-        await fetch(`http://localhost:3000/foods/${food._id}`, {
+        await fetch(`${API_BASE_URL}/foods/${food._id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json', // Set the Content-Type header for JSON data

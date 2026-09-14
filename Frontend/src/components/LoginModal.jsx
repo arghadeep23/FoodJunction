@@ -1,6 +1,7 @@
 import "../styles/Login.scss";
 import { useNavigate } from "react-router-dom";
 import { forwardRef, useState } from "react";
+import { API_BASE_URL } from "../config.js";
 const LoginModal = forwardRef(function LoginModal({ hideModal }, ref) {
     const navigate = useNavigate();
     const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -10,7 +11,7 @@ const LoginModal = forwardRef(function LoginModal({ hideModal }, ref) {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:3000/restaurantLogin", {
+            const response = await fetch(`${API_BASE_URL}/restaurantLogin`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

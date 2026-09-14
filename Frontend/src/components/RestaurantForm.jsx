@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import "../styles/RestaurantForm.scss";
+import { API_BASE_URL } from "../config.js";
 export default function RestaurantForm() {
     const [formData, setFormData] = useState({
         name: "",
@@ -13,7 +14,7 @@ export default function RestaurantForm() {
     const createRestaurant = async (restaurant) => {
         try {
             // GET request to backend to fetch the presigned URL to put the image in S3
-            const url = await fetch("http://localhost:3000/s3URL").then(response => response.json());
+            const url = await fetch(`${API_BASE_URL}/s3URL`).then(response => response.json());
             // PUT request to s3 to upload the image 
             await fetch(url.url, {
                 method: "PUT",
@@ -33,7 +34,7 @@ export default function RestaurantForm() {
                 coverPhotoURL: coverPhotoURL
             }
             // POST request to backend to submit the data to MongoDB
-            await fetch("http://localhost:3000/uploadRestaurant", {
+            await fetch(`${API_BASE_URL}/uploadRestaurant`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
