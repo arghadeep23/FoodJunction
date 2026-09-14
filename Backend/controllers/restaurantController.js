@@ -1,5 +1,4 @@
 const bcrypt = require("bcrypt");
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const Restaurant = require('../models/CompanySchema.js');
 const geocoder = require('../config/mapbox');
@@ -58,9 +57,8 @@ exports.loginRestaurant = async (req, res) => {
     try {
         const existingRestaurant = await Restaurant.findOne({ email });
         if (existingRestaurant) {
-            if (bcrypt.compare(existingRestaurant.password, password)) {
-                const secretKey = crypto.randomBytes(32).toString('hex');
-                const token = jwt.sign({ userId: existingRestaurant._id }, secretKey, { expiresIn: '1h' });
+            if (await bcrypt.compare(password, existingRestaurant.password)) {
+                const token = jwt.sign({ userId: existingRestaurant._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
                 return res.json({ success: true, token: token, restaurantId: existingRestaurant._id });
             }
             else {
